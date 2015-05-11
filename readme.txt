@@ -1,1 +1,1 @@
-This program will 'mlgify" your pictures
+This program will "mlgify" your pictures
