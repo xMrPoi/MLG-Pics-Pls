@@ -21,7 +21,11 @@ import javax.swing.Timer;
 public class Contents extends JPanel implements ActionListener
 {
     private Image character;
-    private int x = 0, y = 0;
+    private Image dor,mtn;
+    private int x = 10, y = 0;
+    private int xD = -20, yD = 0;
+    private int xM = 800, yM = 510;
+    private boolean bM = false, bD = false;
     private Timer t;
     
     
@@ -35,7 +39,11 @@ public class Contents extends JPanel implements ActionListener
     public void paintComponent(Graphics g){ 
         super.paintComponent(g);
         ImageIcon ii = new ImageIcon(this.getClass().getResource("player.jpeg"));
+        ImageIcon ii2 = new ImageIcon(this.getClass().getResource("dew.jpeg"));
+        ImageIcon ii3 = new ImageIcon(this.getClass().getResource("doritoLogo.jpeg"));
         character = ii.getImage();
+        dor = ii3.getImage();
+        mtn = ii2.getImage();
         
 
         Graphics g2d = (Graphics2D)g;//cast
@@ -45,7 +53,26 @@ public class Contents extends JPanel implements ActionListener
         g2d.fillRect(0,0,100,600);
         g2d.fillRect(800,0,100,600);
         g2d.fillRect(0,500,900,100);
+        g2d.drawImage(dor, xD, yD, this);
+        g2d.drawImage(mtn, xM, yM, this);
         g2d.drawImage(character, x, y, this);
+        if(checkWin())
+        {
+            g2d.setColor(Color.white);
+            g2d.fillRect(0,0,900,600);
+            
+            g2d.setColor(Color.black);
+            
+            try
+            {Thread.sleep(4000);
+            }
+            catch(InterruptedException ie)
+            {}
+            
+            g2d.drawString("You won m8", 250, 250);
+        }
+        
+        
     }
     
     int xV = 5;
@@ -95,10 +122,36 @@ public class Contents extends JPanel implements ActionListener
         }
         
     }
+    public void detectMtnCol()
+    {
+        if(xM == x && yM == y)
+        {
+            xM = 250;
+            yM = 250;
+            bM = true;
+        }
+    }
+    public void detectDorCol()
+    {
+        if(xD == x && yD == y)
+        {
+            xD = 400;
+            yD = 250;
+            bD = true;
+        }
+    }
+    public boolean checkWin()
+    {
+        return bD && bM;
+        
+    }
+            
     @Override
     public void actionPerformed(ActionEvent e) {
         
         move();
+        detectMtnCol();
+        detectDorCol();
         repaint();
     }
 
