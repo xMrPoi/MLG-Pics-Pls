@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import java.awt.image.BufferedImage;
 /**
  *
  * @author David
@@ -38,15 +39,20 @@ public class Contents extends JPanel implements ActionListener
     @Override
     public void paintComponent(Graphics g){ 
         super.paintComponent(g);
+        Graphics g2d = (Graphics2D)g;
         ImageIcon ii = new ImageIcon(this.getClass().getResource("player.jpeg"));
         ImageIcon ii2 = new ImageIcon(this.getClass().getResource("dew.jpeg"));
         ImageIcon ii3 = new ImageIcon(this.getClass().getResource("doritoLogo.jpeg"));
         character = ii.getImage();
+        character = character.getScaledInstance(100,50,Image.SCALE_AREA_AVERAGING);
+        
         dor = ii3.getImage();
         mtn = ii2.getImage();
+ 
+        
         
 
-        Graphics g2d = (Graphics2D)g;//cast
+        ;//cast
         setBackground(Color.black);
         g2d.setColor(Color.white);
         g2d.fillRect(0,0,900,100);
@@ -60,15 +66,12 @@ public class Contents extends JPanel implements ActionListener
         {
             g2d.setColor(Color.white);
             g2d.fillRect(0,0,900,600);
-            
-            g2d.setColor(Color.black);
-            
             try
-            {Thread.sleep(4000);
+            {Thread.sleep(3000);
             }
             catch(InterruptedException ie)
             {}
-            
+            g2d.setColor(Color.black);
             g2d.drawString("You won m8", 250, 250);
         }
         

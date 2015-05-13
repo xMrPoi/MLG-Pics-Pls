@@ -14,9 +14,9 @@ import javax.swing.JFrame;
 public class Frame extends JFrame{
     public Frame(){
         super.setTitle("Frame");
-        super.setSize(900,600);
+        super.setSize(1000,700);
         super.setLocation(100,100);
-        super.setResizable(false);
+        super.setResizable(true);
         super.add(new Contents());
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.setVisible(true);
