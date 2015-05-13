@@ -3,7 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/Users/jhenhap7/Desktop/MLG-Pics-Pls/MLGPics/src/mlgpics/MLGPics.java</file>
+=======
+            <file>file:/Users/dgoncha7/Desktop/MLG-Pics-Pls/MLGPics/src/mlgpics/Board.java</file>
+            <file>file:/Users/dgoncha7/Desktop/MLG-Pics-Pls/MLGPics/src/mlgpics/MLGPics.java</file>
+>>>>>>> cb04a5ceefa3fea0645ae9759b02fc4802888951
         </group>
     </open-files>
 </project-private>
