@@ -50,9 +50,7 @@ public class Contents extends JPanel implements ActionListener
         mtn = ii2.getImage();
  
         
-        
-
-        ;//cast
+     
         setBackground(Color.black);
         g2d.setColor(Color.white);
         g2d.fillRect(0,0,900,100);
