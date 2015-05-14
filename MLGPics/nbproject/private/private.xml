@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="5">
+        <file>
+            <url>src/mlgpics/Contents.java</url>
+            <bookmark id="4">
+                <name/>
+                <line>355</line>
+                <key/>
+            </bookmark>
+            <bookmark id="3">
+                <name/>
+                <line>356</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group>
             <file>file:/Users/jhenhap7/Desktop/MLG-Pics-Pls/MLGPics/src/mlgpics/Contents.java</file>
             <file>file:/Users/jhenhap7/Desktop/MLG-Pics-Pls/MLGPics/src/mlgpics/Frame.java</file>
         </group>
+=======
+        <group/>
+>>>>>>> 611f77a280bb40d2e7bb1798aad153535cfc3009
     </open-files>
 </project-private>

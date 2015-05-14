@@ -1,4 +1,10 @@
 .DS_Store
-/*/private
-/*/private.xml
-/MLGPics/nbproject
+project-root-directory/
++ nbproject/
+  build-impl.xml
+  + private/
+  + project.properties
+  + project.xml
++ src/
++ test/
++ build.xml
