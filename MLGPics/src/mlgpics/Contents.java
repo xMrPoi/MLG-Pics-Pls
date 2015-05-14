@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.image.BufferedImage;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import javax.imageio.ImageIO;
 import java.lang.Throwable;
@@ -28,12 +30,14 @@ import javax.swing.JLabel;
  *
  * @author David
  */
-public class Contents extends JPanel implements ActionListener
+public class Contents extends JPanel implements ActionListener, KeyListener
 {
     private Image character;
     private Image dor,mtn, end;
-    private int x = 10, y = 0;
-    private int xD = 0, yD = 0;
+    private int x = 300, y = 0;
+    private int xV = 0;
+    private int yV = 0;
+    private int xD = 25, yD = 25;
     private int xM = 800, yM = 500;
     private boolean bM = false, bD = false;
     private Timer t;
@@ -41,8 +45,11 @@ public class Contents extends JPanel implements ActionListener
     
     public Contents(){
         super.setDoubleBuffered(true);
-        t = new Timer(10,this);
+        t = new Timer(5,this);
         t.start();
+        addKeyListener(this);
+        setFocusable(true);
+        setFocusTraversalKeysEnabled(false);
         
     }
     @Override
@@ -59,25 +66,13 @@ public class Contents extends JPanel implements ActionListener
         dor = ii3.getImage();
         mtn = ii2.getImage();
         end = ii4.getImage();
-        
-        //I don't even know what this is supposed to do
-        ////Internet people said it would work .-.
-        /*ImageIcon ii = new ImageIcon("/Users/David/Desktop/MLG-Pics-Pls/MLGPics/src/mlgpics/player.jpeg");
-        BufferedImage bi = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2d2 = (Graphics2D)bi.createGraphics();
-        g2d2.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING,
-                                   RenderingHints.VALUE_RENDER_QUALITY));*/
-            //boolean b = g2d2.drawImage(ii.getImage(), 0, 0, 50, 50, null);
-            //System.out.println(b);
-        character = scaledImage(character,100,100);
-        dor = scaledImage(dor,100,100);
-        mtn = scaledImage(mtn,100,100);
+  
+        character = scaledImage(character,50,50);
+        dor = scaledImage(dor,30,30);
+        mtn = scaledImage(mtn,30,30);
         end = scaledImage(end,1000,600);
-            //ImageIO.write(bi, "jpeg", new File("dew.jpeg"));
         
- 
-        
-     
+
         setBackground(Color.black);
         g2d.setColor(Color.white);
         g2d.fillRect(0,0,900,100);
@@ -87,32 +82,172 @@ public class Contents extends JPanel implements ActionListener
         g2d.drawImage(dor, xD, yD, this);
         g2d.drawImage(mtn, xM, yM, this);
         g2d.drawImage(character, x, y, this);
-        //try{
-        //checkWin();
-        //}
-        //catch( MalformedURLException mue)
-        //{}
+
         if(checkWin())
         {
             /*g2d.setColor(Color.white);
             g2d.fillRect(0,0,900,600);*/
-            try
+            /*try
             {Thread.sleep(3000);
             }
             catch(InterruptedException ie)
             {}
             /*g2d.setColor(Color.black);
             g2d.drawString("You won m8", 250, 250);}*/
-            g2d.drawImage(end, 0, 0, this);
+            //g2d.drawImage(end, 0, 0, this);
+            
             
         
         }
         
         
     }
+
+    /*public void actionPerformed(ActionEvent e)
+    {
+        repaint();
+        x += xV;
+        y += yV;
+    }*/
+    public void up()
+    {
+        xV = 0;
+        yV = -5;
+    }
+    public void down()
+    {
+        xV = 0;
+        yV = 5;
+    }
+
+    public void left()
+    {
+        xV = -5;
+        yV = 0;
+    }
+
+    public void right()
+    {
+        xV = 5;
+        yV = 0;
+    }
+    public void reset()
+    {
+        xV = 0;
+        yV = 0;
+    }
+    public void rightDown()
+    {
+        xV = 5;
+        yV = 5;
+    }
+    public void rightUp()
+    {
+        xV = 5;
+        yV = -5;
+    }
+    public void leftDown()
+    {
+        xV = -5;
+        yV = 5;
+    }
+    public void leftUp()
+    {
+        xV = -5;
+        yV = -5;
+    }
+    @Override
+    public void keyPressed(KeyEvent e)
+    {
+        int code = e.getKeyCode();
+        
+        /*if((code == KeyEvent.VK_UP && code == KeyEvent.VK_RIGHT) || (code == KeyEvent.VK_W && code == KeyEvent.VK_D))
+        {
+            rightUp();
+        }
+        else if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W)
+        {
+            up();
+        }
+        else if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D)
+        {
+            right();
+        }
+            
+        
+        
+        
+        if((code == KeyEvent.VK_UP && code == KeyEvent.VK_LEFT) || (code == KeyEvent.VK_W && code == KeyEvent.VK_A))
+        {
+            leftUp();
+        }
+        else if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W)
+        {
+            up();
+        }
+        else if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A)
+        {
+            left();
+        }
+        
+        
+        
+        
+        if((code == KeyEvent.VK_DOWN && code == KeyEvent.VK_RIGHT) || (code == KeyEvent.VK_S && code == KeyEvent.VK_D))
+        {
+            rightDown();
+        }
+        else if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S)
+        {
+            down();
+        }
+        else if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D)
+        {
+            right();
+        }
+        
+        
+        if((code == KeyEvent.VK_DOWN && code == KeyEvent.VK_LEFT) || (code == KeyEvent.VK_S && code == KeyEvent.VK_A))
+        {
+            leftDown();
+        }
+        else if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S)
+        {
+            down();
+        }
+        else if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A)
+        {
+            left();
+        }*/
+        
+        if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W)
+        {
+            up();
+        }
+        if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S)
+        {
+            down();
+        }
+        if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A)
+        {
+            left();
+        }
+        if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D)
+        {
+            right();
+        }
+        
+    }
+    @Override
+    public void keyTyped(KeyEvent e) {}
+    @Override
+    public void keyReleased(KeyEvent e) 
+    {
+
+        
+        
+    }
     
-    int xV = 5;
-    int yV = 5;
     boolean top = true;
     boolean bottom = false;
     boolean left = false;
@@ -120,7 +255,7 @@ public class Contents extends JPanel implements ActionListener
     
     public void move()
     {
-        if(top)
+        /*if(top)
         {
             x += xV;
         }
@@ -155,12 +290,21 @@ public class Contents extends JPanel implements ActionListener
         {
             left = false;
             top = true;
-        }
-        
+        }*/
+        if(x > 950)
+            xV = 0;
+        if(x < 0)
+            xV = 0;
+        if(y > 625)
+            yV = 0;
+        if(y < 0)
+            yV = 0;
     }
+   
+   
     public void detectMtnCol()
     {
-        if(xM == x && yM == y)
+        if((xM-50 <= x && x <= 850) && (yM-50 <= y && y <= 50))
         {
             xM = 250;
             yM = 250;
@@ -169,7 +313,7 @@ public class Contents extends JPanel implements ActionListener
     }
     public void detectDorCol()
     {
-        if(xD == x && yD == y)
+        if((xD-50 <= x && x <= 50) && (yD-50 <= y && y <= 50))
         {
             xD = 400;
             yD = 250;
@@ -208,10 +352,13 @@ public class Contents extends JPanel implements ActionListener
             
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+        x += xV;
+        y += yV;
         move();
         detectMtnCol();
         detectDorCol();
+        
+        
         repaint();
     }
 
