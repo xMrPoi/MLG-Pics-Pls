@@ -34,7 +34,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
 {
     private Image character;
     private Image dor,mtn, end;
-    private int x = 300, y = 0;
+    private int x = 300, y = 10;
     private int xV = 0;
     private int yV = 0;
     private int xD = 25, yD = 25;
@@ -60,8 +60,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         ImageIcon ii2 = new ImageIcon(this.getClass().getResource("dew.jpeg"));
         ImageIcon ii3 = new ImageIcon(this.getClass().getResource("doritoLogo.jpeg"));
         ImageIcon ii4 = new ImageIcon(this.getClass().getResource("images.jpeg"));
-        
-        //haracter = character.getScaledInstance(100,50,Image.SCALE_AREA_AVERAGING);
+     
         character = ii.getImage();
         dor = ii3.getImage();
         mtn = ii2.getImage();
@@ -70,31 +69,34 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         character = scaledImage(character,50,50);
         dor = scaledImage(dor,30,30);
         mtn = scaledImage(mtn,30,30);
-        end = scaledImage(end,1000,600);
+        end = scaledImage(end,1000,700);
         
 
         setBackground(Color.black);
         g2d.setColor(Color.white);
-        g2d.fillRect(0,0,900,100);
-        g2d.fillRect(0,0,100,600);
-        g2d.fillRect(800,0,100,600);
-        g2d.fillRect(0,500,900,100);
+        g2d.fillRect(0,0,1000,100);
+        g2d.fillRect(0,0,100,700);
+        g2d.fillRect(900,0,100,700);
+        g2d.fillRect(0,600,1000,100);
+        g2d.fillRect(200,0,100,700);
+        g2d.fillRect(450,0,100,700);
+        g2d.fillRect(700,0,100,700);
+        g2d.fillRect(0,300,1000,100);
+
         g2d.drawImage(dor, xD, yD, this);
         g2d.drawImage(mtn, xM, yM, this);
         g2d.drawImage(character, x, y, this);
 
         if(checkWin())
         {
-            /*g2d.setColor(Color.white);
-            g2d.fillRect(0,0,900,600);*/
-            /*try
+
+            try
             {Thread.sleep(3000);
             }
             catch(InterruptedException ie)
             {}
-            /*g2d.setColor(Color.black);
-            g2d.drawString("You won m8", 250, 250);}*/
-            //g2d.drawImage(end, 0, 0, this);
+
+            g2d.drawImage(end, 0, 0, this);
             
             
         
@@ -102,41 +104,51 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         
         
     }
-
-    /*public void actionPerformed(ActionEvent e)
-    {
-        repaint();
-        x += xV;
-        y += yV;
-    }*/
+    /*if(x >= 950 || x <= 0)
+            xV = 0;
+        else if(x < 950 && x > 0)
+            xV = 5;
+     
+        if(y >= 625 || y <= 0)
+            yV = 0;
+        else if(y < 625 && y > 0)
+            xV = 5;*/
     public void up()
     {
+   
         xV = 0;
         yV = -5;
+
     }
     public void down()
     {
+
+        
         xV = 0;
         yV = 5;
+
     }
 
     public void left()
     {
         xV = -5;
         yV = 0;
+
     }
 
     public void right()
     {
+
         xV = 5;
         yV = 0;
+
     }
     public void reset()
     {
         xV = 0;
         yV = 0;
     }
-    public void rightDown()
+    /*public void rightDown()
     {
         xV = 5;
         yV = 5;
@@ -155,7 +167,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     {
         xV = -5;
         yV = -5;
-    }
+    }*/
     @Override
     public void keyPressed(KeyEvent e)
     {
@@ -291,20 +303,15 @@ public class Contents extends JPanel implements ActionListener, KeyListener
             left = false;
             top = true;
         }*/
-        if(x > 950)
-            xV = 0;
-        if(x < 0)
-            xV = 0;
-        if(y > 625)
-            yV = 0;
-        if(y < 0)
-            yV = 0;
+        
+        
+        
     }
    
    
     public void detectMtnCol()
     {
-        if((xM-50 <= x && x <= 850) && (yM-50 <= y && y <= 50))
+        if((xM-50 <= x && x <= xM+50) && (yM-50 <= y && y <= yM+50))
         {
             xM = 250;
             yM = 250;
@@ -313,7 +320,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     }
     public void detectDorCol()
     {
-        if((xD-50 <= x && x <= 50) && (yD-50 <= y && y <= 50))
+        if((xD-50 <= x && x <= xD+50) && (yD-50 <= y && y <= yD+50))
         {
             xD = 400;
             yD = 250;
@@ -322,23 +329,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     }
     public boolean checkWin()
     {
-        /*if(bD && bM)
-        {
-            xV = 0;
-            yV = 0;
-            URL url = new URL("http://cdn.yourepeat.com/media/gif/000/627/681/63322bf6e355e19a0746313e7ab18387.gif");
-            Icon icon = new ImageIcon(url);
-            JLabel label = new JLabel(icon);
-
-            JFrame f = new JFrame("Animation");
-            f.getContentPane().add(label);
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            f.pack();
-            f.setLocationRelativeTo(null);
-            f.setVisible(true);
-        }*/
-        return bD && bM;
-        
+      return bD && bM;      
     }
     private Image scaledImage(Image img, int w, int h)
     {
@@ -351,14 +342,14 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     }
             
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
+       
+        move(); 
         x += xV;
         y += yV;
-        move();
         detectMtnCol();
         detectDorCol();
-        
-        
         repaint();
     }
 
