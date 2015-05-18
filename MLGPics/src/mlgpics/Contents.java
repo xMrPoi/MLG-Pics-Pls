@@ -72,7 +72,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         end = scaledImage(end,1000,700);
         
 
-        setBackground(Color.black);
+        setBackground(Color.black); 
         g2d.setColor(Color.white);
         g2d.fillRect(0,0,1000,100);
         g2d.fillRect(0,0,100,700);
@@ -343,7 +343,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     
     public void checkEdge()
     {
-        if(x >= 1000 && xV != -5)//For 
+        if(x >= 1000 && xV != -5)//For edges 
             xV = 0;
         else if(x <= 0 && xV != 5)
             xV = 0;
@@ -352,6 +352,8 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         else if(y <= 0 && yV != 5)
             yV = 0;
         
+        if(x >= 100 && x <= 450 && y == 50 && yV != 0)
+            yV = 0;//For Blocks
     }
             
     @Override
