@@ -78,9 +78,9 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         g2d.fillRect(0,0,100,700);
         g2d.fillRect(900,0,100,700);
         g2d.fillRect(0,600,1000,100);
-        g2d.fillRect(200,0,100,700);
+        
         g2d.fillRect(450,0,100,700);
-        g2d.fillRect(700,0,100,700);
+        
         g2d.fillRect(0,300,1000,100);
 
         g2d.drawImage(dor, xD, yD, this);
@@ -256,7 +256,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     public void keyReleased(KeyEvent e) 
     {
 
-        
+        reset();
         
     }
     
@@ -340,12 +340,26 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         g2d.drawImage(img, 0, 0, w, h, null);
         return resizedImage;
     }
+    
+    public void checkEdge()
+    {
+        if(x >= 1000 && xV != -5)//For 
+            xV = 0;
+        else if(x <= 0 && xV != 5)
+            xV = 0;
+        if(y >= 700 && yV != -5)
+            yV = 0;
+        else if(y <= 0 && yV != 5)
+            yV = 0;
+        
+    }
             
     @Override
     public void actionPerformed(ActionEvent e)
     {
        
         move(); 
+        checkEdge();
         x += xV;
         y += yV;
         detectMtnCol();
