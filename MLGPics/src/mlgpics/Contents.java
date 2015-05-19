@@ -38,7 +38,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private int xV = 0;
     private int yV = 0;
     private int xD = 25, yD = 25;
-    private int xM = 800, yM = 500;
+    private int xM = 950, yM = 630;
     private boolean bM = false, bD = false;
     private Timer t;
     
@@ -343,31 +343,49 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     
     public void checkEdge()
     {
-        if(x >= 1000 && xV != -5)//For edges 
+        if(x >= 950 && xV != -5)//For edges 
             xV = 0;
         else if(x <= 0 && xV != 5)
             xV = 0;
-        if(y >= 700 && yV != -5)
+        if(y >= 630 && yV != -5)
             yV = 0;
         else if(y <= 0 && yV != 5)
             yV = 0;
         
-        if(x >= 100 && x <= 450 && y == 50 && yV != -5)
-            yV = 0;//For Blocks
-        if(x >= 550 && x <= 900 && y == 50 && yV != -5)
+        if(x > 50 && x < 450 && y == 50 && yV != -5)
+            yV = 0;//For Horizontal Block Edges
+        if(x > 500 && x < 900 && y == 50 && yV != -5)
             yV = 0;
-        if(x >= 100 && x <= 450 && y == 350 && yV != -5)
-            yV = 0;//For Blocks
-        if(x >= 550 && x <= 900 && y == 350 && yV != -5)
+        if(x > 100 && x < 450 && y == 350 && yV != -5)
             yV = 0;
-        if(x >= 100 && x <= 450 && y == 300 && yV != 5)
-            yV = 0;//For Blocks
-        if(x >= 550 && x <= 900 && y == 300 && yV != 5)
+        if(x > 500 && x < 900 && y == 350 && yV != -5)
             yV = 0;
-        if(x >= 100 && x <= 450 && y == 600 && yV != 5)
-            yV = 0;//For Blocks
-        if(x >= 550 && x <= 900 && y == 600 && yV != 5)
+        if(x > 100 && x < 450 && y == 300 && yV != 5)
             yV = 0;
+        if(x > 500 && x < 900 && y == 300 && yV != 5)
+            yV = 0;
+        if(x > 100 && x < 450 && y == 600 && yV != 5)
+            yV = 0;
+        if(x > 500 && x < 900 && y == 600 && yV != 5)
+            yV = 0;
+        
+        
+        if(y > 50 && y < 300 && x == 50 && xV != -5)
+            xV = 0;//For Vertical Block Edges
+        if(y > 350 && y < 600 && x == 50 && xV != -5)
+            xV = 0;
+        if(y > 50 && y < 300 && x == 500 && xV != -5)
+            xV = 0;
+        if(y > 350 && y < 600 && x == 500 && xV != -5)
+            xV = 0;
+        if(y > 50 && y < 300 && x == 450 && xV != 5)
+            xV = 0;
+        if(y > 350 && y < 600 && x == 450 && xV != 5)
+            xV = 0;
+        if(y > 50 && y < 300 && x == 900 && xV != 5)
+            xV = 0;
+        if(y > 350 && y < 600 && x == 900 && xV != 5)
+            xV = 0;
     }
             
     @Override
