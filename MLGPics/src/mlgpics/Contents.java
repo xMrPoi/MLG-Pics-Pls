@@ -256,7 +256,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     public void keyReleased(KeyEvent e) 
     {
 
-        reset();
+        //reset();
         
     }
     
@@ -352,8 +352,22 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         else if(y <= 0 && yV != 5)
             yV = 0;
         
-        if(x >= 100 && x <= 450 && y == 50 && yV != 0)
+        if(x >= 100 && x <= 450 && y == 50 && yV != -5)
             yV = 0;//For Blocks
+        if(x >= 550 && x <= 900 && y == 50 && yV != -5)
+            yV = 0;
+        if(x >= 100 && x <= 450 && y == 350 && yV != -5)
+            yV = 0;//For Blocks
+        if(x >= 550 && x <= 900 && y == 350 && yV != -5)
+            yV = 0;
+        if(x >= 100 && x <= 450 && y == 300 && yV != 5)
+            yV = 0;//For Blocks
+        if(x >= 550 && x <= 900 && y == 300 && yV != 5)
+            yV = 0;
+        if(x >= 100 && x <= 450 && y == 600 && yV != 5)
+            yV = 0;//For Blocks
+        if(x >= 550 && x <= 900 && y == 600 && yV != 5)
+            yV = 0;
     }
             
     @Override
