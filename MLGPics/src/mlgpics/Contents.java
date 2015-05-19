@@ -18,29 +18,41 @@ import java.awt.image.BufferedImage;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
+/*import java.io.File;
 import javax.imageio.ImageIO;
 import java.lang.Throwable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.Icon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JFrame;       //Unused, but I don't want to delete it...
+import javax.swing.JLabel;       //It makes us look smarter
+import java.applet.AudioClip;
+import java.applet.Applet;
+import java.util.List;
+import java.util.ArrayList;*/
 /**
  *
  * @author David
  */
 public class Contents extends JPanel implements ActionListener, KeyListener
 {
+    private Collectible[] collectables = new Collectible[20];
+    private Image[] images = {new ImageIcon(this.getClass().getResource("dew.jpeg")).getImage(),
+                                  new ImageIcon(this.getClass().getResource("dewLogo.jpeg")).getImage(),
+                                  new ImageIcon(this.getClass().getResource("doritoAndDew.jpeg")).getImage(),
+                                  new ImageIcon(this.getClass().getResource("doritoLogo.jpeg")).getImage(),
+                                  new ImageIcon(this.getClass().getResource("euphorito.jpeg")).getImage()};
+    
     private Image character;
     private Image dor,mtn, end;
-    private int x = 300, y = 10;
+    private int x = 150, y = 10;
     private int xV = 0;
     private int yV = 0;
     private int xD = 25, yD = 25;
     private int xM = 800, yM = 500;
-    private boolean bM = false, bD = false;
+    private boolean bM = false, bD = false, isWon = false;
     private Timer t;
+
     
     
     public Contents(){
@@ -50,6 +62,11 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
+        for(int ind = 0; ind < collectables.length; ind++)
+        {
+            
+            collectables[ind] = (new Collectible(images[(int)(Math.random()*5)],(ind/4) * 230 + 20, (ind%3) * 300 + 35));
+        }
         
     }
     @Override
@@ -57,18 +74,22 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         super.paintComponent(g);
         Graphics g2d = (Graphics2D)g;
         ImageIcon ii = new ImageIcon(this.getClass().getResource("player.jpeg"));
-        ImageIcon ii2 = new ImageIcon(this.getClass().getResource("dew.jpeg"));
-        ImageIcon ii3 = new ImageIcon(this.getClass().getResource("doritoLogo.jpeg"));
+        /*ImageIcon ii2 = new ImageIcon(this.getClass().getResource("dew.jpeg"));
+        ImageIcon ii3 = new ImageIcon(this.getClass().getResource("doritoLogo.jpeg"));*/
         ImageIcon ii4 = new ImageIcon(this.getClass().getResource("images.jpeg"));
      
         character = ii.getImage();
-        dor = ii3.getImage();
-        mtn = ii2.getImage();
+        /*dor = ii3.getImage();
+        mtn = ii2.getImage();*/
         end = ii4.getImage();
   
+        for(int ind = 0; ind < collectables.length; ind++)
+        {
+            collectables[ind].setImage(scaledImage(collectables[ind].getImage(), 40, 40));
+        }
         character = scaledImage(character,50,50);
-        dor = scaledImage(dor,30,30);
-        mtn = scaledImage(mtn,30,30);
+        /*dor = scaledImage(dor,30,30);
+        mtn = scaledImage(mtn,30,30);*/
         end = scaledImage(end,1000,700);
         
 
@@ -83,11 +104,15 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         g2d.fillRect(700,0,100,700);
         g2d.fillRect(0,300,1000,100);
 
-        g2d.drawImage(dor, xD, yD, this);
-        g2d.drawImage(mtn, xM, yM, this);
+        //g2d.drawImage(dor, xD, yD, this);
+        //g2d.drawImage(mtn, xM, yM, this);
+        for (int ind = 0; ind < collectables.length; ind++) {
+            if(!collectables[ind].isCollected())
+                g2d.drawImage(collectables[ind].getImage(), collectables[ind].getX(), collectables[ind].getY(), this);
+        }
         g2d.drawImage(character, x, y, this);
 
-        if(checkWin())
+        if(isWon)
         {
 
             try
@@ -117,7 +142,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     {
    
         xV = 0;
-        yV = -5;
+        yV = -10;
 
     }
     public void down()
@@ -125,13 +150,13 @@ public class Contents extends JPanel implements ActionListener, KeyListener
 
         
         xV = 0;
-        yV = 5;
+        yV = 10;
 
     }
 
     public void left()
     {
-        xV = -5;
+        xV = -10;
         yV = 0;
 
     }
@@ -139,7 +164,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     public void right()
     {
 
-        xV = 5;
+        xV = 10;
         yV = 0;
 
     }
@@ -257,7 +282,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     {
 
         
-        
+        //reset();
     }
     
     boolean top = true;
@@ -327,10 +352,10 @@ public class Contents extends JPanel implements ActionListener, KeyListener
             bD = true;
         }
     }
-    public boolean checkWin()
+    /*public boolean checkWin()
     {
       return bD && bM;      
-    }
+    }*/
     private Image scaledImage(Image img, int w, int h)
     {
         BufferedImage resizedImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
@@ -340,6 +365,31 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         g2d.drawImage(img, 0, 0, w, h, null);
         return resizedImage;
     }
+    public void detectHit()
+    {
+        for(int ind = 0; ind < collectables.length; ind++)
+        {
+            if(collectables[ind].getX() - 50 <= x && x <= collectables[ind].getX() + 50 &&
+              (collectables[ind].getY() - 50 <= y && y <= collectables[ind].getY() + 50))
+            {
+                collectables[ind].setCollected(true);
+            }
+        }
+    }
+    public boolean checkWin()
+    {
+        for(int ind = 0; ind < collectables.length; ind++)
+        {
+            if(!collectables[ind].isCollected())
+            {
+                isWon = false;
+                return false;
+            }
+            
+        }
+        isWon = true;
+        return true;
+    }
             
     @Override
     public void actionPerformed(ActionEvent e)
@@ -348,9 +398,8 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         move(); 
         x += xV;
         y += yV;
-        detectMtnCol();
-        detectDorCol();
+        detectHit();
+        checkWin();
         repaint();
     }
-
 }
