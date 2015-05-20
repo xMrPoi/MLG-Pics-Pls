@@ -6,6 +6,7 @@
 package mlgpics;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -38,10 +39,10 @@ public class Contents extends JPanel implements ActionListener, KeyListener
 {
     private Collectible[] collectables = new Collectible[20];
     private Image[] images = {new ImageIcon(this.getClass().getResource("dew.jpeg")).getImage(),
-                                  new ImageIcon(this.getClass().getResource("dewLogo.jpeg")).getImage(),
-                                  new ImageIcon(this.getClass().getResource("doritoAndDew.jpeg")).getImage(),
-                                  new ImageIcon(this.getClass().getResource("doritoLogo.jpeg")).getImage(),
-                                  new ImageIcon(this.getClass().getResource("euphorito.jpeg")).getImage()};
+                              new ImageIcon(this.getClass().getResource("dewLogo.jpeg")).getImage(),
+                              new ImageIcon(this.getClass().getResource("doritoAndDew.jpeg")).getImage(),
+                              new ImageIcon(this.getClass().getResource("doritoLogo.jpeg")).getImage(),
+                              new ImageIcon(this.getClass().getResource("euphorito.jpeg")).getImage()};
     
     private Image character;
     private Image dor,mtn, end;
@@ -49,9 +50,15 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private int xV = 0;
     private int yV = 0;
     private int xD = 25, yD = 25;
-    private int xM = 800, yM = 500;
-    private boolean bM = false, bD = false, isWon = false;
+    private boolean isWon = false;
     private Timer t;
+    private int score = 0;
+    private int amt = 20;
+    private int speed = 5;
+    private long startTime = System.currentTimeMillis();
+    private long currentTime = 0;
+    private long interval = 0;
+    
 
     
     
@@ -69,18 +76,16 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         }
         
     }
+
     @Override
     public void paintComponent(Graphics g){ 
         super.paintComponent(g);
         Graphics g2d = (Graphics2D)g;
+        g2d.setFont(new Font("TimesRoman", Font.BOLD, 25)); 
         ImageIcon ii = new ImageIcon(this.getClass().getResource("player.jpeg"));
-        /*ImageIcon ii2 = new ImageIcon(this.getClass().getResource("dew.jpeg"));
-        ImageIcon ii3 = new ImageIcon(this.getClass().getResource("doritoLogo.jpeg"));*/
         ImageIcon ii4 = new ImageIcon(this.getClass().getResource("images.jpeg"));
      
         character = ii.getImage();
-        /*dor = ii3.getImage();
-        mtn = ii2.getImage();*/
         end = ii4.getImage();
   
         for(int ind = 0; ind < collectables.length; ind++)
@@ -88,24 +93,20 @@ public class Contents extends JPanel implements ActionListener, KeyListener
             collectables[ind].setImage(scaledImage(collectables[ind].getImage(), 40, 40));
         }
         character = scaledImage(character,50,50);
-        /*dor = scaledImage(dor,30,30);
-        mtn = scaledImage(mtn,30,30);*/
         end = scaledImage(end,1000,700);
         
 
-        setBackground(Color.black);
+        setBackground(Color.black); 
         g2d.setColor(Color.white);
         g2d.fillRect(0,0,1000,100);
         g2d.fillRect(0,0,100,700);
         g2d.fillRect(900,0,100,700);
         g2d.fillRect(0,600,1000,100);
-        g2d.fillRect(200,0,100,700);
+        
         g2d.fillRect(450,0,100,700);
-        g2d.fillRect(700,0,100,700);
+        
         g2d.fillRect(0,300,1000,100);
-
-        //g2d.drawImage(dor, xD, yD, this);
-        //g2d.drawImage(mtn, xM, yM, this);
+        
         for (int ind = 0; ind < collectables.length; ind++) {
             if(!collectables[ind].isCollected())
                 g2d.drawImage(collectables[ind].getImage(), collectables[ind].getX(), collectables[ind].getY(), this);
@@ -124,39 +125,28 @@ public class Contents extends JPanel implements ActionListener, KeyListener
             g2d.drawImage(end, 0, 0, this);
             
             
-        
         }
-        
+        g2d.setColor(Color.black);
+        g2d.drawString("Score: "+ score, 50, 25);
         
     }
-    /*if(x >= 950 || x <= 0)
-            xV = 0;
-        else if(x < 950 && x > 0)
-            xV = 5;
-     
-        if(y >= 625 || y <= 0)
-            yV = 0;
-        else if(y < 625 && y > 0)
-            xV = 5;*/
     public void up()
     {
    
         xV = 0;
-        yV = -10;
+        yV = -speed;
 
     }
     public void down()
-    {
-
-        
+    {   
         xV = 0;
-        yV = 10;
+        yV = speed;
 
     }
 
     public void left()
     {
-        xV = -10;
+        xV = -speed;
         yV = 0;
 
     }
@@ -164,7 +154,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     public void right()
     {
 
-        xV = 10;
+        xV = speed;
         yV = 0;
 
     }
@@ -173,90 +163,10 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         xV = 0;
         yV = 0;
     }
-    /*public void rightDown()
-    {
-        xV = 5;
-        yV = 5;
-    }
-    public void rightUp()
-    {
-        xV = 5;
-        yV = -5;
-    }
-    public void leftDown()
-    {
-        xV = -5;
-        yV = 5;
-    }
-    public void leftUp()
-    {
-        xV = -5;
-        yV = -5;
-    }*/
     @Override
     public void keyPressed(KeyEvent e)
     {
         int code = e.getKeyCode();
-        
-        /*if((code == KeyEvent.VK_UP && code == KeyEvent.VK_RIGHT) || (code == KeyEvent.VK_W && code == KeyEvent.VK_D))
-        {
-            rightUp();
-        }
-        else if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W)
-        {
-            up();
-        }
-        else if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D)
-        {
-            right();
-        }
-            
-        
-        
-        
-        if((code == KeyEvent.VK_UP && code == KeyEvent.VK_LEFT) || (code == KeyEvent.VK_W && code == KeyEvent.VK_A))
-        {
-            leftUp();
-        }
-        else if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W)
-        {
-            up();
-        }
-        else if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A)
-        {
-            left();
-        }
-        
-        
-        
-        
-        if((code == KeyEvent.VK_DOWN && code == KeyEvent.VK_RIGHT) || (code == KeyEvent.VK_S && code == KeyEvent.VK_D))
-        {
-            rightDown();
-        }
-        else if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S)
-        {
-            down();
-        }
-        else if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D)
-        {
-            right();
-        }
-        
-        
-        if((code == KeyEvent.VK_DOWN && code == KeyEvent.VK_LEFT) || (code == KeyEvent.VK_S && code == KeyEvent.VK_A))
-        {
-            leftDown();
-        }
-        else if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S)
-        {
-            down();
-        }
-        else if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A)
-        {
-            left();
-        }*/
-        
         if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W)
         {
             up();
@@ -279,9 +189,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     public void keyTyped(KeyEvent e) {}
     @Override
     public void keyReleased(KeyEvent e) 
-    {
-
-        
+    { 
         //reset();
     }
     
@@ -289,73 +197,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     boolean bottom = false;
     boolean left = false;
     boolean right = false;
-    
-    public void move()
-    {
-        /*if(top)
-        {
-            x += xV;
-        }
-        else if(right)
-        {
-            y += yV;
-        }
-        else if(bottom)
-        {
-            x -= xV;
-        }
-        else if(left)
-        {
-            y -= yV;
-        }
-        if(x == 800 && y == 0)
-        {
-            top = false;
-            right = true;
-        }
-        else if(x == 800 && y == 500)
-        {
-            right = false;
-            bottom = true;
-        }
-        else if(x == 0 && y == 500)
-        {
-            bottom = false;
-            left = true;
-        }
-        else if(x == 0 && y == 0)
-        {
-            left = false;
-            top = true;
-        }*/
-        
-        
-        
-    }
-   
-   
-    public void detectMtnCol()
-    {
-        if((xM-50 <= x && x <= xM+50) && (yM-50 <= y && y <= yM+50))
-        {
-            xM = 250;
-            yM = 250;
-            bM = true;
-        }
-    }
-    public void detectDorCol()
-    {
-        if((xD-50 <= x && x <= xD+50) && (yD-50 <= y && y <= yD+50))
-        {
-            xD = 400;
-            yD = 250;
-            bD = true;
-        }
-    }
-    /*public boolean checkWin()
-    {
-      return bD && bM;      
-    }*/
+
     private Image scaledImage(Image img, int w, int h)
     {
         BufferedImage resizedImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
@@ -365,14 +207,18 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         g2d.drawImage(img, 0, 0, w, h, null);
         return resizedImage;
     }
+
     public void detectHit()
     {
         for(int ind = 0; ind < collectables.length; ind++)
         {
             if(collectables[ind].getX() - 50 <= x && x <= collectables[ind].getX() + 50 &&
-              (collectables[ind].getY() - 50 <= y && y <= collectables[ind].getY() + 50))
+              (collectables[ind].getY() - 50 <= y && y <= collectables[ind].getY() + 50 &&
+               !collectables[ind].isCollected()))
             {
                 collectables[ind].setCollected(true);
+                score += 50;
+                amt --;
             }
         }
     }
@@ -390,16 +236,97 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         isWon = true;
         return true;
     }
+    public void checkEdge()
+    {
+        if(x >= 950 && xV == speed)//For borders
+            xV = 0;
+        else if(x <= 0 && xV == -speed)
+            xV = 0;
+        if(y >= 630 && yV == speed)
+            yV = 0;
+        else if(y <= 0 && yV == -speed)
+            yV = 0;
+        
+        if(x > 50 && x < 450 && y == 50 && yV != -speed)
+            yV = 0;//For Horizontal Block Edges
+        if(x > 500 && x < 900 && y == 50 && yV != -speed)
+            yV = 0;
+        if(x > 100 && x < 450 && y == 350 && yV != -speed)
+            yV = 0;
+        if(x > 500 && x < 900 && y == 350 && yV != -speed)
+            yV = 0;
+        if(x > 100 && x < 450 && y == 300 && yV != speed)
+            yV = 0;
+        if(x > 500 && x < 900 && y == 300 && yV != speed)
+            yV = 0;
+        if(x > 100 && x < 450 && y == 600 && yV != speed)
+            yV = 0;
+        if(x > 500 && x < 900 && y == 600 && yV != speed)
+            yV = 0;
+        
+        
+        if(y > 50 && y < 300 && x == 50 && xV != -speed)
+            xV = 0;//For Vertical Block Edges
+        if(y > 350 && y < 600 && x == 50 && xV != -speed)
+            xV = 0;
+        if(y > 50 && y < 300 && x == 500 && xV != -speed)
+            xV = 0;
+        if(y > 350 && y < 600 && x == 500 && xV != -speed)
+            xV = 0;
+        if(y > 50 && y < 300 && x == 450 && xV != speed)
+            xV = 0;
+        if(y > 350 && y < 600 && x == 450 && xV != speed)
+            xV = 0;
+        if(y > 50 && y < 300 && x == 900 && xV != speed)
+            xV = 0;
+        if(y > 350 && y < 600 && x == 900 && xV != speed)
+            xV = 0;
+
+    }
+    public void regenerate()
+    {
+        if(interval >= 4 && currentTime >= 7)
+        {
             
+            collectables[(int)(Math.random()*20)].setCollected(false);
+        }
+    }
+    
+    public void updateSpeed()
+    {
+        if(interval >= 10 && currentTime >= 15)
+            speed ++;
+        
+    }
+    
+    public void updateCurrent()
+    {
+        currentTime = (int)(System.currentTimeMillis()-startTime)/1000;
+    }
+    
+    public void updateInterval()
+    {
+        interval = (int)(System.currentTimeMillis() - (currentTime * 1000))/1000;
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e)
     {
-       
-        move(); 
+        checkEdge();//Velocity updates
+        
         x += xV;
-        y += yV;
-        detectHit();
-        checkWin();
+        y += yV;//Actualy movements
+        
+        detectHit();//Collection
+        
+        checkWin();//Possible end  
+        
+        regenerate();//Implied Doctor Who reference
+           
+        updateCurrent();//Updates 
+        updateInterval(); 
+        updateSpeed();
+        
         repaint();
     }
 }
