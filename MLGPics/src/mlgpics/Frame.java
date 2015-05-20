@@ -45,10 +45,11 @@ public static void music()
 {
     /*AudioPlayer AP = AudioPlayer.player;
     File file = new File("BackgroundMusic.wav");
+    AudioStream AS;
     AudioData AD;
     ContinuousAudioDataStream loop = null;
     try{
-    AS = new AudioStream(new FileInputStream("/Users/David/Desktop/MLG-Pics-Pls/MLGPics/src/mlgpics/BackgroundMusic.wav"));
+    AS = new AudioStream(new FileInputStream("BackgroundMusic.wav"));
     AD = AS.getData();
     loop = new ContinuousAudioDataStream(AD);
     }
@@ -62,6 +63,7 @@ public static void music()
     }
     catch(Exception e){}
             */
+    
     }
    
 }

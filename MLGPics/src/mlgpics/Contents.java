@@ -55,7 +55,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private int score = 0;
     private int amt = 20;
     private int speed = 5;
-    private long startTime = System.currentTimeMillis();
+    private long startTime = System.currentTimeMillis()/1000;
     private long currentTime = 0;
     private long interval = 0;
     
@@ -107,9 +107,10 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         
         g2d.fillRect(0,300,1000,100);
         
-        for (int ind = 0; ind < collectables.length; ind++) {
-            if(!collectables[ind].isCollected())
-                g2d.drawImage(collectables[ind].getImage(), collectables[ind].getX(), collectables[ind].getY(), this);
+        for (Collectible collectable : collectables) {
+            if (!collectable.isCollected()) {
+                g2d.drawImage(collectable.getImage(), collectable.getX(), collectable.getY(), this);
+            }
         }
         g2d.drawImage(character, x, y, this);
 
@@ -210,13 +211,9 @@ public class Contents extends JPanel implements ActionListener, KeyListener
 
     public void detectHit()
     {
-        for(int ind = 0; ind < collectables.length; ind++)
-        {
-            if(collectables[ind].getX() - 50 <= x && x <= collectables[ind].getX() + 50 &&
-              (collectables[ind].getY() - 50 <= y && y <= collectables[ind].getY() + 50 &&
-               !collectables[ind].isCollected()))
-            {
-                collectables[ind].setCollected(true);
+        for (Collectible collectable : collectables) {
+            if (collectable.getX() - 50 <= x && x <= collectable.getX() + 50 && (collectable.getY() - 50 <= y && y <= collectable.getY() + 50 && !collectable.isCollected())) {
+                collectable.setCollected(true);
                 score += 50;
                 amt --;
             }
@@ -224,14 +221,11 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     }
     public boolean checkWin()
     {
-        for(int ind = 0; ind < collectables.length; ind++)
-        {
-            if(!collectables[ind].isCollected())
-            {
+        for (Collectible collectable : collectables) {
+            if (!collectable.isCollected()) {
                 isWon = false;
                 return false;
             }
-            
         }
         isWon = true;
         return true;
@@ -251,15 +245,15 @@ public class Contents extends JPanel implements ActionListener, KeyListener
             yV = 0;//For Horizontal Block Edges
         if(x > 500 && x < 900 && y == 50 && yV != -speed)
             yV = 0;
-        if(x > 100 && x < 450 && y == 350 && yV != -speed)
+        if(x > 50 && x < 450 && y == 350 && yV != -speed)
             yV = 0;
         if(x > 500 && x < 900 && y == 350 && yV != -speed)
             yV = 0;
-        if(x > 100 && x < 450 && y == 300 && yV != speed)
+        if(x > 50 && x < 450 && y == 300 && yV != speed)
             yV = 0;
         if(x > 500 && x < 900 && y == 300 && yV != speed)
             yV = 0;
-        if(x > 100 && x < 450 && y == 600 && yV != speed)
+        if(x > 50 && x < 450 && y == 600 && yV != speed)
             yV = 0;
         if(x > 500 && x < 900 && y == 600 && yV != speed)
             yV = 0;
@@ -283,12 +277,16 @@ public class Contents extends JPanel implements ActionListener, KeyListener
             xV = 0;
 
     }
+    //currentTime is in seconds
+    //interval is in seconds
+    //start time is in seconds
+    //System.currentTimeMillis() in milliseconds
     public void regenerate()
     {
-        if(interval >= 4 && currentTime >= 7)
+        if(interval >= 7 && currentTime >= 10)
         {
-            
             collectables[(int)(Math.random()*20)].setCollected(false);
+            interval = 0;
         }
     }
     
@@ -296,17 +294,16 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     {
         if(interval >= 10 && currentTime >= 15)
             speed ++;
-        
     }
     
     public void updateCurrent()
     {
-        currentTime = (int)(System.currentTimeMillis()-startTime)/1000;
+        currentTime = (int)(System.currentTimeMillis()/1000. - startTime);
     }
     
     public void updateInterval()
     {
-        interval = (int)(System.currentTimeMillis() - (currentTime * 1000))/1000;
+        interval = startTime - currentTime;
     }
     
     @Override
@@ -325,7 +322,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
            
         updateCurrent();//Updates 
         updateInterval(); 
-        updateSpeed();
+        //updateSpeed();
         
         repaint();
     }
