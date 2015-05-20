@@ -5,11 +5,7 @@
  */
 package mlgpics;
 
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import javax.swing.ImageIcon;
 
 /**
  *

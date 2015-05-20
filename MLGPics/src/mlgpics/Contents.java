@@ -19,18 +19,6 @@ import java.awt.image.BufferedImage;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-/*import java.io.File;
-import javax.imageio.ImageIO;
-import java.lang.Throwable;
-import java.net.MalformedURLException;
-import java.net.URL;
-import javax.swing.Icon;
-import javax.swing.JFrame;       //Unused, but I don't want to delete it...
-import javax.swing.JLabel;       //It makes us look smarter
-import java.applet.AudioClip;
-import java.applet.Applet;
-import java.util.List;
-import java.util.ArrayList;*/
 /**
  *
  * @author David
