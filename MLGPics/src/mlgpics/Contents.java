@@ -30,7 +30,8 @@ public class Contents extends JPanel implements ActionListener, KeyListener
                               new ImageIcon(this.getClass().getResource("dewLogo.jpeg")).getImage(),
                               new ImageIcon(this.getClass().getResource("doritoAndDew.jpeg")).getImage(),
                               new ImageIcon(this.getClass().getResource("doritoLogo.jpeg")).getImage(),
-                              new ImageIcon(this.getClass().getResource("euphorito.jpeg")).getImage()};
+                              new ImageIcon(this.getClass().getResource("euphorito.jpeg")).getImage(),
+                              new ImageIcon(this.getClass().getResource("RV1BwzL.jpeg")).getImage()};
     
     private Image character;
     private Image dor,mtn, end;
@@ -60,7 +61,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         for(int ind = 0; ind < collectables.length; ind++)
         {
             
-            collectables[ind] = (new Collectible(images[(int)(Math.random()*5)],(ind/4) * 230 + 20, (ind%3) * 300 + 35));
+            collectables[ind] = (new Collectible(images[(int)(Math.random()*6)],(ind/4) * 230 + 20, (ind%3) * 300 + 35));
         }
         
     }

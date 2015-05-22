@@ -35,20 +35,6 @@ public static void main(String [] args){
     new Frame(); 
 
     }
-public static void music() throws MalformedURLException, LineUnavailableException, UnsupportedAudioFileException, IOException
-{
-        URL url = new URL("http://pscode.org/media/leftright.wav");
-        Clip clip = AudioSystem.getClip();
-        // getAudioInputStream() also accepts a File or InputStream
-        AudioInputStream ais = AudioSystem.getAudioInputStream( url );
-        clip.open(ais);
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {JOptionPane.showMessageDialog(null, "Close to exit!");
-        }
-        });
-    }
 }
 
 
