@@ -44,6 +44,7 @@ public class Runner {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(url + " not found");
         }
+        
         AudioStream as = null;
         try {
             as = new AudioStream(in);
@@ -51,5 +52,13 @@ public class Runner {
             Logger.getLogger(Runner.class.getName()).log(Level.SEVERE, null, ex);
         }
         AudioPlayer.player.start(as);
+        try{
+        Thread.sleep(10000);
+        }
+        catch(InterruptedException ie)
+        {
+            
+        }
+        
     }
 }

@@ -16,6 +16,7 @@ public class Filler {
     private int x, y;
     private int xSpeed, ySpeed;
     private Image img;
+    private boolean isOn;
     private Image[] images = {new ImageIcon(this.getClass().getResource("3Doge5UFiller.jpeg")).getImage(),
                               new ImageIcon(this.getClass().getResource("IgnFiller.jpeg")).getImage(),
                               new ImageIcon(this.getClass().getResource("freggFiller.jpeg")).getImage(),
@@ -29,12 +30,21 @@ public class Filler {
         img = images[(int)(Math.random()*8)];
         x = (int)(Math.random()*1000);
         y = (int)(Math.random()*700);
-        xSpeed = (int)(Math.random()*25);
-        ySpeed = (int)(Math.random()*25);
+        xSpeed = (int)(Math.random()*25 + 1);
+        ySpeed = (int)(Math.random()*25 + 1);
+        isOn = false;
     }
     
     public void update()
     {
+        if(x >= 1000 || x <= 0)
+        {
+            xSpeed = -xSpeed;
+        }
+        if(y >= 700 || y <= 0)
+        {
+            ySpeed = -ySpeed;
+        }
         x += xSpeed;
         y += ySpeed;
     }
@@ -47,6 +57,27 @@ public class Filler {
     {
         return y;
     }
+    
+    
+    public boolean IsOn()
+    {
+        return isOn;
+    }
+    public void turnOn()
+    {
+        isOn = true;
+    }
+    
+    
+    public Image getImg()
+    {
+        return img;
+    }
+    public void setImg(Image i)
+    {
+        img = i;
+    }
+    
     
     
     

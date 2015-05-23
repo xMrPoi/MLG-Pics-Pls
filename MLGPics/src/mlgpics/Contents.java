@@ -32,6 +32,27 @@ public class Contents extends JPanel implements ActionListener, KeyListener
                               new ImageIcon(this.getClass().getResource("doritoLogo.jpeg")).getImage(),
                               new ImageIcon(this.getClass().getResource("euphorito.jpeg")).getImage(),
                               new ImageIcon(this.getClass().getResource("RV1BwzL.jpeg")).getImage()};
+    private Filler[] fillers = {new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler(),
+                                new Filler(),new Filler(),new Filler()};//60
+    
     
     private Image character;
     private Image dor,mtn, end;
@@ -40,6 +61,9 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private int yV = 0;
     private int xD = 25, yD = 25;
     private boolean isWon = false;
+    private boolean addSpeed = true;
+    private Color rectangles = new Color(0,0,0);
+    private Color course = new Color(255,255,255);
     private Timer t;
     private int score = 0;
     private int amt = 20;
@@ -47,6 +71,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private long startTime = System.currentTimeMillis()/1000;
     private long currentTime = 0;
     private long interval = 0;
+    private int timesRun = 0;
     
 
     
@@ -59,10 +84,15 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         for(int ind = 0; ind < collectables.length; ind++)
-        {
-            
+        {   
             collectables[ind] = (new Collectible(images[(int)(Math.random()*6)],(ind/4) * 230 + 20, (ind%3) * 300 + 35));
         }
+        for (Filler filler : fillers) {
+            filler.setImg(scaledImage(filler.getImg(), (int)(Math.random()*100 + 50) , (int)(Math.random()*100 + 50)));
+        }
+        
+        
+
         
     }
 
@@ -76,17 +106,24 @@ public class Contents extends JPanel implements ActionListener, KeyListener
      
         character = ii.getImage();
         end = ii4.getImage();
-  
-        for(int ind = 0; ind < collectables.length; ind++)
+        
+        for (Filler filler : fillers) //changes coordinates of fillers
         {
-            collectables[ind].setImage(scaledImage(collectables[ind].getImage(), 40, 40));
+            filler.update();
         }
+        fillers[0].update();
+  
+        for (Collectible collectable : collectables) {
+            collectable.setImage(scaledImage(collectable.getImage(), 40, 40));
+        }
+
+        
         character = scaledImage(character,50,50);
         end = scaledImage(end,1000,700);
         
 
-        setBackground(Color.black); 
-        g2d.setColor(Color.white);
+        setBackground(rectangles); 
+        g2d.setColor(course);
         g2d.fillRect(0,0,1000,100);
         g2d.fillRect(0,0,100,700);
         g2d.fillRect(900,0,100,700);
@@ -101,8 +138,15 @@ public class Contents extends JPanel implements ActionListener, KeyListener
                 g2d.drawImage(collectable.getImage(), collectable.getX(), collectable.getY(), this);
             }
         }
+        
+        
+       
         g2d.drawImage(character, x, y, this);
-
+        for (Filler filler : fillers) {
+            if (filler.IsOn()) {
+                g2d.drawImage(filler.getImg(), filler.getX(), filler.getY(), this);
+            }
+        }
         if(isWon)
         {
 
@@ -230,39 +274,39 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         else if(y <= 0 && yV == -speed)
             yV = 0;
         
-        if(x > 50 && x < 450 && y == 50 && yV != -speed)
+        if(x > 50 && x < 450 && y >= 50 && y <= 50 && yV != -speed)
             yV = 0;//For Horizontal Block Edges
-        if(x > 500 && x < 900 && y == 50 && yV != -speed)
+        if(x > 500 && x < 900 && y >= 50 && y <= 50 && yV != -speed)
             yV = 0;
-        if(x > 50 && x < 450 && y == 350 && yV != -speed)
+        if(x > 50 && x < 450 && y >= 350 && y <= 350 && yV != -speed)
             yV = 0;
-        if(x > 500 && x < 900 && y == 350 && yV != -speed)
+        if(x > 500 && x < 900 && y >= 350 && y <= 350 && yV != -speed)
             yV = 0;
-        if(x > 50 && x < 450 && y == 300 && yV != speed)
+        if(x > 50 && x < 450 && y <= 300 && y >=300 && yV != speed)
             yV = 0;
-        if(x > 500 && x < 900 && y == 300 && yV != speed)
+        if(x > 500 && x < 900 && y <= 300 && y >=300 && yV != speed)
             yV = 0;
-        if(x > 50 && x < 450 && y == 600 && yV != speed)
+        if(x > 50 && x < 450 && y <= 600 && y >=600 && yV != speed)
             yV = 0;
-        if(x > 500 && x < 900 && y == 600 && yV != speed)
+        if(x > 500 && x < 900 && y <= 600 && y >=600 && yV != speed)
             yV = 0;
         
         
-        if(y > 50 && y < 300 && x == 50 && xV != -speed)
+        if(y > 50 && y < 300 && x >= 50 && x <= 50 &&xV != -speed)
             xV = 0;//For Vertical Block Edges
-        if(y > 350 && y < 600 && x == 50 && xV != -speed)
+        if(y > 350 && y < 600 && x >= 50 && x <= 50 && xV != -speed)
             xV = 0;
-        if(y > 50 && y < 300 && x == 500 && xV != -speed)
+        if(y > 50 && y < 300 && x <= 500 && x >= 500 && xV != -speed)
             xV = 0;
-        if(y > 350 && y < 600 && x == 500 && xV != -speed)
+        if(y > 350 && y < 600 && x <= 500 && x >= 500 && xV != -speed)
             xV = 0;
-        if(y > 50 && y < 300 && x == 450 && xV != speed)
+        if(y > 50 && y < 300 && x >= 450 && x <= 450 && xV != speed)
             xV = 0;
-        if(y > 350 && y < 600 && x == 450 && xV != speed)
+        if(y > 350 && y < 600 && x >= 450 && x <= 450 && xV != speed)
             xV = 0;
-        if(y > 50 && y < 300 && x == 900 && xV != speed)
+        if(y > 50 && y < 300 && x <= 900 && x >= 900 && xV != speed)
             xV = 0;
-        if(y > 350 && y < 600 && x == 900 && xV != speed)
+        if(y > 350 && y < 600 && x <= 900 && x >= 900 && xV != speed)
             xV = 0;
 
     }
@@ -281,8 +325,16 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     
     public void updateSpeed()
     {
-        if(interval >= 10 && currentTime >= 15)
-            speed ++;
+        if(score % 200 == 0 && score != 0 && addSpeed)
+        {  
+            speed += 5;
+            addSpeed = false;
+        }
+        else if(timesRun == 3000)
+        {
+             addSpeed = true;       
+        }
+        timesRun++;
     }
     
     public void updateCurrent()
@@ -294,6 +346,27 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     {
         interval = startTime - currentTime;
     }
+    
+    public void addSpam()
+    {
+        if((int)(Math.random()*1000) > 900)
+        {
+            //fillers[(int)(Math.random()*20)].turnOn();
+            fillers[(int)(Math.random()*20)].turnOn();
+        }
+        
+    }
+    public void updateColors()
+    {
+        if(score >= 2000)
+        {
+            rectangles = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+            course = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+        }
+            
+    }
+    
+    
     
     @Override
     public void actionPerformed(ActionEvent e)
@@ -311,8 +384,10 @@ public class Contents extends JPanel implements ActionListener, KeyListener
            
         updateCurrent();//Updates 
         updateInterval(); 
-        //updateSpeed();
-        
+        updateSpeed();
+        addSpam();
+        updateColors();
         repaint();
+        
     }
 }
