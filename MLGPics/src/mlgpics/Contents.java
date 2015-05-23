@@ -25,7 +25,7 @@ import java.awt.event.KeyListener;
  */
 public class Contents extends JPanel implements ActionListener, KeyListener
 {
-    private Collectible[] collectables = new Collectible[20];
+    private Collectible[] collectables = new Collectible[21];
     private Image[] images = {new ImageIcon(this.getClass().getResource("dew.jpeg")).getImage(),
                               new ImageIcon(this.getClass().getResource("dewLogo.jpeg")).getImage(),
                               new ImageIcon(this.getClass().getResource("doritoAndDew.jpeg")).getImage(),
@@ -56,7 +56,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     
     private Image character;
     private Image dor,mtn, end;
-    private int x = 150, y = 10;
+    private int x = 475, y = 150;
     private int xV = 0;
     private int yV = 0;
     private int xD = 25, yD = 25;
@@ -65,13 +65,14 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private Color rectangles = new Color(0,0,0);
     private Color course = new Color(255,255,255);
     private Timer t;
-    private int score = 0;
+    private int score = 0, finScore = 0;
     private int amt = 20;
-    private int speed = 5;
-    private long startTime = System.currentTimeMillis()/1000;
-    private long currentTime = 0;
+    private int speed = 30;
+    private double startTime = System.currentTimeMillis();
+    private double currentTime = 0;
     private long interval = 0;
     private int timesRun = 0;
+    
     
 
     
@@ -83,10 +84,17 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
-        for(int ind = 0; ind < collectables.length; ind++)
-        {   
-            collectables[ind] = (new Collectible(images[(int)(Math.random()*6)],(ind/4) * 230 + 20, (ind%3) * 300 + 35));
-        }
+        for(int ind = 0; ind < 7; ind++)
+            collectables[ind] = (new Collectible(images[(int)(Math.random()*6)],ind * 150 + 30, 35));
+        for(int ind = 7; ind < 14; ind++)
+            collectables[ind] = (new Collectible(images[(int)(Math.random()*6)], (ind % 7) * 150 + 30, 350));
+        for(int ind = 14; ind < 21; ind++)
+            collectables[ind] = (new Collectible(images[(int)(Math.random()*6)], (ind % 7) * 150 + 30, 630));
+        
+        
+        
+        
+        
         for (Filler filler : fillers) {
             filler.setImg(scaledImage(filler.getImg(), (int)(Math.random()*100 + 50) , (int)(Math.random()*100 + 50)));
         }
@@ -149,19 +157,29 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         }
         if(isWon)
         {
+            x += speed;
+            y += speed;
 
-            try
-            {Thread.sleep(3000);
+            g2d.drawImage(end, 0, 0, this);
+            finScore += (double)(1/currentTime) * 1000000;
+            
+            g2d.setColor(Color.black);
+            g2d.drawString("Score: "+ score + " + " + "Bonus Score: " + finScore, 50, 25);
+            
+            g2d.dispose();
+            setVisible(false);
+            try{
+                Thread.sleep(3000);
             }
             catch(InterruptedException ie)
             {}
-
-            g2d.drawImage(end, 0, 0, this);
-            
             
         }
+        else
+        {
         g2d.setColor(Color.black);
         g2d.drawString("Score: "+ score, 50, 25);
+        }
         
     }
     public void up()
@@ -292,7 +310,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
             yV = 0;
         
         
-        if(y > 50 && y < 300 && x >= 50 && x <= 50 &&xV != -speed)
+        if(y > 50 && y < 300 && x >= 50 && x <= 50 && xV != -speed)
             xV = 0;//For Vertical Block Edges
         if(y > 350 && y < 600 && x >= 50 && x <= 50 && xV != -speed)
             xV = 0;
@@ -310,16 +328,12 @@ public class Contents extends JPanel implements ActionListener, KeyListener
             xV = 0;
 
     }
-    //currentTime is in seconds
-    //interval is in seconds
-    //start time is in seconds
-    //System.currentTimeMillis() in milliseconds
+    
     public void regenerate()
     {
-        if(interval >= 7 && currentTime >= 10)
+        if(currentTime % 40 == 0)
         {
             collectables[(int)(Math.random()*20)].setCollected(false);
-            interval = 0;
         }
     }
     
@@ -339,13 +353,15 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     
     public void updateCurrent()
     {
-        currentTime = (int)(System.currentTimeMillis()/1000. - startTime);
+        currentTime = System.currentTimeMillis() - startTime;
     }
     
-    public void updateInterval()
+    /*public void updateInterval()
+    
     {
         interval = startTime - currentTime;
     }
+    */
     
     public void addSpam()
     {
@@ -380,10 +396,11 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         
         checkWin();//Possible end  
         
+        
+        updateCurrent();//Updates 
         regenerate();//Implied Doctor Who reference
            
-        updateCurrent();//Updates 
-        updateInterval(); 
+        //updateInterval(); 
         updateSpeed();
         addSpam();
         updateColors();
