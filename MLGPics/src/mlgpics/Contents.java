@@ -41,17 +41,17 @@ public class Contents extends JPanel implements ActionListener, KeyListener
                                 new Filler(),new Filler(),new Filler(),
                                 new Filler(),new Filler(),new Filler(),
                                 new Filler(),new Filler(),new Filler(),
-                                new Filler(),new Filler(),new Filler(),
-                                new Filler(),new Filler(),new Filler(),
-                                new Filler(),new Filler(),new Filler(),
-                                new Filler(),new Filler(),new Filler(),
-                                new Filler(),new Filler(),new Filler(),
-                                new Filler(),new Filler(),new Filler(),
-                                new Filler(),new Filler(),new Filler(),
-                                new Filler(),new Filler(),new Filler(),
-                                new Filler(),new Filler(),new Filler(),
-                                new Filler(),new Filler(),new Filler(),
-                                new Filler(),new Filler(),new Filler()};//60
+                                new Filler(),new Filler(),new Filler()};//30
+                                //new Filler(),new Filler(),new Filler(),
+                                //new Filler(),new Filler(),new Filler(),
+                                //new Filler(),new Filler(),new Filler(),
+                                //new Filler(),new Filler(),new Filler(),
+                                //new Filler(),new Filler(),new Filler(),
+                                //new Filler(),new Filler(),new Filler(),
+                                //new Filler(),new Filler(),new Filler(),
+                                //new Filler(),new Filler(),new Filler(),
+                                //new Filler(),new Filler(),new Filler(),
+                                //new Filler(),new Filler(),new Filler()};//60
     
     
     private Image character;
@@ -62,19 +62,17 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private int xD = 25, yD = 25;
     private boolean isWon = false;
     private boolean addSpeed = true;
+    private boolean reactions = false;
     private Color rectangles = new Color(0,0,0);
     private Color course = new Color(255,255,255);
     private Timer t;
     private int score = 0, finScore = 0;
     private int amt = 20;
-    private int speed = 30;
+    private int speed = 5;
     private double startTime = System.currentTimeMillis();
     private double currentTime = 0;
     private long interval = 0;
     private int timesRun = 0;
-    
-    
-
     
     
     public Contents(){
@@ -267,6 +265,9 @@ public class Contents extends JPanel implements ActionListener, KeyListener
                 collectable.setCollected(true);
                 score += 50;
                 amt --;
+                addSpam();
+                if(reactions) Runner.playMusic("sniperhit.wav");
+                else Runner.playMusic("hitmarker.wav");
             }
         }
     }
@@ -374,8 +375,12 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     }
     public void updateColors()
     {
-        if(score >= 2000)
-        {
+        if(score >= 2000){
+            if(!reactions){
+                reactions = true;
+                Runner.playMusic("mlg_reaction.wav");
+            }
+            
             rectangles = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
             course = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
         }
@@ -402,7 +407,11 @@ public class Contents extends JPanel implements ActionListener, KeyListener
            
         //updateInterval(); 
         updateSpeed();
-        addSpam();
+        
+        //added to collectable pickup
+        //addSpam();
+                
+                
         updateColors();
         repaint();
         

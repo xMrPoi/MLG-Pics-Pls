@@ -37,7 +37,7 @@ public class Runner {
         return Runner.class.getResource(url).toString().replace("file:", "");
     }
 
-    private static void playMusic(String url) {
+    public static void playMusic(String url) {
         InputStream in = null;
         try {
             in = new FileInputStream(getURL(url));
@@ -52,13 +52,5 @@ public class Runner {
             Logger.getLogger(Runner.class.getName()).log(Level.SEVERE, null, ex);
         }
         AudioPlayer.player.start(as);
-        try{
-        Thread.sleep(10000);
-        }
-        catch(InterruptedException ie)
-        {
-            
-        }
-        
     }
 }
