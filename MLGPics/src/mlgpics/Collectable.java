@@ -11,28 +11,28 @@ import java.awt.Image;
  *
  * @author David
  */
-public class Collectible {
+public class Collectable {
     private Image image;
     private int atX;
     private int atY;
     private boolean isCollected = false;
 
-    public Collectible(Image img, int x, int y)
+    public Collectable(Image img, int x, int y)
     {
     image = img;
     atX = x;
     atY = y;
     }
-    public boolean isCollected()
-    {
+    
+    public boolean isCollected(){
         return isCollected;
     }
-    public int getX()
-    {
+    
+    public int getX(){
         return atX;
     }
-    public int getY()
-    {
+    
+    public int getY(){
         return atY;
     }
     
@@ -42,27 +42,23 @@ public class Collectible {
             isCollected = true;
     }*/
     
-    public Image getImage()
-    {
+    public Image getImage(){
         return image;
     }
     
-    public void setImage(Image img)
-    {
+    public void setImage(Image img){
         image = img;
     }
-    public void setX(int x)
-    {
+    
+    public void setX(int x){
         atX = x;
     }
-    public void setY(int y)
-    {
+    
+    public void setY(int y){
         atY = y;
     }
-    public void setCollected(boolean b)
-    {
+    
+    public void setCollected(boolean b){
         isCollected = b;
     }    
-        
-
 }

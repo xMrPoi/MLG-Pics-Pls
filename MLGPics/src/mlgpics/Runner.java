@@ -5,18 +5,13 @@
  */
 package mlgpics;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JFrame;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
 
 /**
- *
+ * Runner class made to set and execute options for the game
+ * 
  * @author Jack
  */
 public class Runner {
@@ -25,32 +20,17 @@ public class Runner {
         JFrame frame = new JFrame();
         frame.setTitle("Frame");
         frame.setSize(1000, 700);
-        frame.setLocation(100, 100);
+        frame.setPreferredSize(new Dimension(1000, 700));
+        
+        // Centering frame
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int)(dim.getWidth() - frame.getWidth())/2;
+        int y = (int)(dim.getHeight() - frame.getHeight())/2;
+        frame.setLocation(x, y);
+        
         frame.setResizable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(new Contents());
         frame.setVisible(true);
-        playMusic("Music.wav");
-    }
-
-    private static String getURL(String url) {
-        return Runner.class.getResource(url).toString().replace("file:", "");
-    }
-
-    public static void playMusic(String url) {
-        InputStream in = null;
-        try {
-            in = new FileInputStream(getURL(url));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(url + " not found");
-        }
-        
-        AudioStream as = null;
-        try {
-            as = new AudioStream(in);
-        } catch (IOException ex) {
-            Logger.getLogger(Runner.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        AudioPlayer.player.start(as);
     }
 }

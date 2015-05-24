@@ -25,7 +25,7 @@ import java.awt.event.KeyListener;
  */
 public class Contents extends JPanel implements ActionListener, KeyListener
 {
-    private Collectible[] collectables = new Collectible[21];
+    private Collectable[] collectables = new Collectable[21];
     private Image[] images = {new ImageIcon(this.getClass().getResource("dew.jpeg")).getImage(),
                               new ImageIcon(this.getClass().getResource("dewLogo.jpeg")).getImage(),
                               new ImageIcon(this.getClass().getResource("doritoAndDew.jpeg")).getImage(),
@@ -56,24 +56,35 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     
     private Image character;
     private Image dor,mtn, end;
+    
+    private final LoopingColor backgroundColor = new LoopingColor(0.2F);
+    private final LoopingColor boxesColor = new LoopingColor(0.4F);
+    
     private int x = 475, y = 150;
     private int xV = 0;
     private int yV = 0;
-    private int xD = 25, yD = 25;
+    //private int xD = 25, yD = 25;
+    private final int timerX = 180, timerY = 6;
+    
     private boolean isWon = false;
     private boolean addSpeed = true;
     private boolean reactions = false;
+    
     private Color rectangles = new Color(0,0,0);
     private Color course = new Color(255,255,255);
+    
     private Timer t;
+    
     private int score = 0, finScore = 0;
     private int amt = 20;
     private int speed = 5;
-    private double startTime = System.currentTimeMillis();
-    private double currentTime = 0;
-    private long interval = 0;
     private int timesRun = 0;
     
+    private final long startTime = System.currentTimeMillis();
+    private long currentTime = 0;
+    private long lastPickup = System.currentTimeMillis();
+    
+    private final Sound backgroundMusic, mlgReaction;
     
     public Contents(){
         super.setDoubleBuffered(true);
@@ -83,22 +94,21 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         for(int ind = 0; ind < 7; ind++)
-            collectables[ind] = (new Collectible(images[(int)(Math.random()*6)],ind * 150 + 30, 35));
+            collectables[ind] = (new Collectable(images[(int)(Math.random()*6)],ind * 150 + 30, 35));
         for(int ind = 7; ind < 14; ind++)
-            collectables[ind] = (new Collectible(images[(int)(Math.random()*6)], (ind % 7) * 150 + 30, 350));
+            collectables[ind] = (new Collectable(images[(int)(Math.random()*6)], (ind % 7) * 150 + 30, 350));
         for(int ind = 14; ind < 21; ind++)
-            collectables[ind] = (new Collectible(images[(int)(Math.random()*6)], (ind % 7) * 150 + 30, 630));
-        
-        
-        
+            collectables[ind] = (new Collectable(images[(int)(Math.random()*6)], (ind % 7) * 150 + 30, 630));
         
         
         for (Filler filler : fillers) {
             filler.setImg(scaledImage(filler.getImg(), (int)(Math.random()*100 + 50) , (int)(Math.random()*100 + 50)));
         }
         
-        
-
+        // Initializing and starting playback of music
+        backgroundMusic = new Sound("Music.wav");
+        mlgReaction = new Sound("mlg_reaction.wav");
+        backgroundMusic.play();
         
     }
 
@@ -119,7 +129,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         }
         fillers[0].update();
   
-        for (Collectible collectable : collectables) {
+        for (Collectable collectable : collectables) {
             collectable.setImage(scaledImage(collectable.getImage(), 40, 40));
         }
 
@@ -139,7 +149,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         
         g2d.fillRect(0,300,1000,100);
         
-        for (Collectible collectable : collectables) {
+        for (Collectable collectable : collectables) {
             if (!collectable.isCollected()) {
                 g2d.drawImage(collectable.getImage(), collectable.getX(), collectable.getY(), this);
             }
@@ -176,80 +186,85 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         else
         {
         g2d.setColor(Color.black);
-        g2d.drawString("Score: "+ score, 50, 25);
+        g2d.drawString("Score: "+ score, 25, 25);
         }
         
+        // 750 - (int)((System.currentTimeMillis()-lastPickup)/2.5)
+        // Subtracting the time in milliseconds between last Collectable
+        //    and the current time from 750 to get a new width for the countdown
+        g2d.setColor(Color.blue);
+        g2d.fillRect(timerX, timerY, 750 - (int)((System.currentTimeMillis()-lastPickup)/2.5), 20);
+        g2d.setColor(Color.black);
+        g2d.drawRect(timerX, timerY, 750 - (int)((System.currentTimeMillis()-lastPickup)/2.5), 20);
     }
-    public void up()
-    {
-   
+    
+    // Moves player 'speed' amount up
+    public void up(){
         xV = 0;
         yV = -speed;
-
     }
-    public void down()
-    {   
+    
+    // Moves player 'speed' amount down
+    public void down(){   
         xV = 0;
         yV = speed;
-
     }
-
-    public void left()
-    {
+    
+    // Moves player 'speed' amount left
+    public void left(){
         xV = -speed;
         yV = 0;
-
     }
-
-    public void right()
-    {
-
+    
+    // Moves player 'speed' amount right
+    public void right(){
         xV = speed;
         yV = 0;
-
     }
-    public void reset()
-    {
+    
+    public void reset(){
         xV = 0;
         yV = 0;
     }
+    
     @Override
     public void keyPressed(KeyEvent e)
     {
         int code = e.getKeyCode();
+        
         if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W)
-        {
             up();
-        }
+        
+        
         if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S)
-        {
             down();
-        }
+        
+        
         if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A)
-        {
             left();
-        }
+        
+        
         if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D)
-        {
             right();
-        }
         
     }
     @Override
     public void keyTyped(KeyEvent e) {}
     @Override
-    public void keyReleased(KeyEvent e) 
-    { 
-        //reset();
-    }
+    public void keyReleased(KeyEvent e) {}
     
-    boolean top = true;
-    boolean bottom = false;
-    boolean left = false;
-    boolean right = false;
-
-    private Image scaledImage(Image img, int w, int h)
-    {
+    //boolean top = true;
+    //boolean bottom = false;
+    //boolean left = false;
+    //boolean right = false;
+    
+    /**
+     * @param img : Image to scale
+     * @param w : Width to scale to
+     * @param h : Height to scale to
+     * @return : Returns scaled 'img'
+     */
+    private Image scaledImage(Image img, int w, int h){
         BufferedImage resizedImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = resizedImage.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
@@ -258,30 +273,58 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         return resizedImage;
     }
 
-    public void detectHit()
-    {
-        for (Collectible collectable : collectables) {
+    /**
+     * Detects if you are touching a collectable
+     */
+    public void detectHit(){
+        for (Collectable collectable : collectables) {
+            
+            // If player is touching collectable
             if (collectable.getX() - 50 <= x && x <= collectable.getX() + 50 && (collectable.getY() - 50 <= y && y <= collectable.getY() + 50 && !collectable.isCollected())) {
                 collectable.setCollected(true);
                 score += 50;
                 amt --;
+                
+                // Sets lastPickup to currentTimeMillis
+                updateCountdown();
+                
+                // Chance to add spam image
                 addSpam();
-                if(reactions) Runner.playMusic("sniperhit.wav");
-                else Runner.playMusic("hitmarker.wav");
+                
+                // If score is above reaction limit, plays sniper hit
+                //   instead of a hitmarker sound
+                if(reactions) new Sound("sniperhit.wav").play();
+                else new Sound("hitmarker.wav").play();
             }
         }
     }
+    
+    /**
+     * Checks if you have collected every type of collectable
+     * 
+     * @return : If you have won of not
+     */
     public boolean checkWin()
     {
-        for (Collectible collectable : collectables) {
+        for (Collectable collectable : collectables) {
             if (!collectable.isCollected()) {
                 isWon = false;
                 return false;
             }
         }
-        isWon = true;
-        return true;
+        
+        ///////////////
+        //isWon = true;
+        //return true;
+        ///////////////
+        
+        isWon = false;
+        return false;
     }
+    
+    /**
+     * Checks to see if player is touching the borders or boxes
+     */
     public void checkEdge()
     {
         if(x >= 950 && xV == speed)//For borders
@@ -330,30 +373,28 @@ public class Contents extends JPanel implements ActionListener, KeyListener
 
     }
     
-    public void regenerate()
-    {
+    /**
+     * Regenerates random Collectable
+     */
+    public void regenerate(){
         if(currentTime % 40 == 0)
-        {
             collectables[(int)(Math.random()*20)].setCollected(false);
-        }
     }
     
-    public void updateSpeed()
-    {
-        if(score % 200 == 0 && score != 0 && addSpeed)
-        {  
+    public void updateSpeed(){
+        if(score % 200 == 0 && score != 0 && addSpeed){
             speed += 5;
             addSpeed = false;
         }
+        
         else if(timesRun == 3000)
-        {
-             addSpeed = true;       
-        }
+             addSpeed = true;
+        
         timesRun++;
     }
     
-    public void updateCurrent()
-    {
+    
+    public void updateCurrent(){
         currentTime = System.currentTimeMillis() - startTime;
     }
     
@@ -364,6 +405,14 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     }
     */
     
+    /**
+     * Sets time since last pickup to currentTimeMillis
+     */
+    public void updateCountdown(){
+        lastPickup = System.currentTimeMillis();
+    }
+    
+    // 1 in 10 chance of spawning a Filler
     public void addSpam()
     {
         if((int)(Math.random()*1000) > 900)
@@ -378,16 +427,14 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         if(score >= 2000){
             if(!reactions){
                 reactions = true;
-                Runner.playMusic("mlg_reaction.wav");
+                mlgReaction.play();
+                backgroundMusic.stop();
             }
             
-            rectangles = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
-            course = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+            rectangles = boxesColor.nextColor();
+            course = backgroundColor.nextColor();
         }
-            
     }
-    
-    
     
     @Override
     public void actionPerformed(ActionEvent e)
@@ -395,7 +442,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         checkEdge();//Velocity updates
         
         x += xV;
-        y += yV;//Actualy movements
+        y += yV;//Actual movements
         
         detectHit();//Collection
         
@@ -414,6 +461,5 @@ public class Contents extends JPanel implements ActionListener, KeyListener
                 
         updateColors();
         repaint();
-        
     }
 }
