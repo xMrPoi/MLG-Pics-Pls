@@ -84,7 +84,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private long currentTime = 0;
     private long lastPickup = System.currentTimeMillis();
     
-    private final Sound backgroundMusic, mlgReaction;
+    private final Sound backgroundMusic, mlgReaction, darude;
     
     public Contents(){
         super.setDoubleBuffered(true);
@@ -108,6 +108,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         // Initializing and starting playback of music
         backgroundMusic = new Sound("Music.wav");
         mlgReaction = new Sound("mlg_reaction.wav");
+        darude = new Sound("darude.wav");
         backgroundMusic.play();
         
     }
@@ -424,10 +425,11 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     }
     public void updateColors()
     {
-        if(score >= 2000){
+        if(score >= 200){
             if(!reactions){
                 reactions = true;
                 mlgReaction.play();
+                darude.play();
                 backgroundMusic.stop();
             }
             
