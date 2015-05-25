@@ -440,12 +440,13 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     }
     public void updateColors()
     {
-        if(score >= 2000){
+        if(score >= 3000){
             course = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
             rectangles = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+            rekt.play();
             
         }
-        else if(score >= 4000){
+        else if(score >= 1500){
             if(!reactions){
                 reactions = true;
                 mlgReaction.play();
