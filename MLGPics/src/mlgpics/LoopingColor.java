@@ -29,4 +29,5 @@ public class LoopingColor {
         }else hue += .01;
         return Color.getHSBColor(hue, .9F, .8F);
     }
+    
 }

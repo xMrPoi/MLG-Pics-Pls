@@ -55,7 +55,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     
     
     private Image character;
-    private Image dor,mtn, end;
+    private Image end, hit;
     
     private final LoopingColor backgroundColor = new LoopingColor(0.2F);
     private final LoopingColor boxesColor = new LoopingColor(0.4F);
@@ -68,7 +68,8 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     
     private boolean isWon = false;
     private boolean addSpeed = true;
-    private boolean reactions = false;
+    private boolean reactions = false, ep = false;
+    private boolean hitmarker = false;
     
     private Color rectangles = new Color(0,0,0);
     private Color course = new Color(255,255,255);
@@ -84,7 +85,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private long currentTime = 0;
     private long lastPickup = System.currentTimeMillis();
     
-    private final Sound backgroundMusic, mlgReaction, darude;
+    private final Sound backgroundMusic, mlgReaction, darude, rekt;
     
     public Contents(){
         super.setDoubleBuffered(true);
@@ -109,6 +110,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         backgroundMusic = new Sound("Music.wav");
         mlgReaction = new Sound("mlg_reaction.wav");
         darude = new Sound("darude.wav");
+        rekt = new Sound("rekt.wav");
         backgroundMusic.play();
         
     }
@@ -120,9 +122,11 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         g2d.setFont(new Font("TimesRoman", Font.BOLD, 25)); 
         ImageIcon ii = new ImageIcon(this.getClass().getResource("player.jpeg"));
         ImageIcon ii4 = new ImageIcon(this.getClass().getResource("images.jpeg"));
+        ImageIcon ii5 = new ImageIcon(this.getClass().getResource("hitmarkerFiller.jpeg"));
      
         character = ii.getImage();
         end = ii4.getImage();
+        hit = ii5.getImage();
         
         for (Filler filler : fillers) //changes coordinates of fillers
         {
@@ -137,10 +141,13 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         
         character = scaledImage(character,50,50);
         end = scaledImage(end,1000,700);
+        hit = scaledImage(end,100,100);
         
 
         setBackground(rectangles); 
+
         g2d.setColor(course);
+        
         g2d.fillRect(0,0,1000,100);
         g2d.fillRect(0,0,100,700);
         g2d.fillRect(900,0,100,700);
@@ -164,6 +171,11 @@ public class Contents extends JPanel implements ActionListener, KeyListener
                 g2d.drawImage(filler.getImg(), filler.getX(), filler.getY(), this);
             }
         }
+        if(hitmarker)
+        {
+            g2d.drawImage(hit, x, y, this);
+        }
+        
         if(isWon)
         {
             x += speed;
@@ -296,7 +308,10 @@ public class Contents extends JPanel implements ActionListener, KeyListener
                 //   instead of a hitmarker sound
                 if(reactions) new Sound("sniperhit.wav").play();
                 else new Sound("hitmarker.wav").play();
+                hitmarker = true;
             }
+            else
+                hitmarker = false;
         }
     }
     
@@ -416,16 +431,21 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     // 1 in 10 chance of spawning a Filler
     public void addSpam()
     {
-        if((int)(Math.random()*1000) > 900)
+        if((int)(Math.random()*1000) > 700)
         {
             //fillers[(int)(Math.random()*20)].turnOn();
-            fillers[(int)(Math.random()*20)].turnOn();
+            fillers[(int)(Math.random()*30)].turnOn();
         }
         
     }
     public void updateColors()
     {
-        if(score >= 200){
+        if(score >= 2000){
+            course = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+            rectangles = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+            
+        }
+        else if(score >= 4000){
             if(!reactions){
                 reactions = true;
                 mlgReaction.play();
@@ -436,6 +456,8 @@ public class Contents extends JPanel implements ActionListener, KeyListener
             rectangles = boxesColor.nextColor();
             course = backgroundColor.nextColor();
         }
+        
+            
     }
     
     @Override
