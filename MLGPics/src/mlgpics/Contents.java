@@ -56,6 +56,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     
     private Image character;
     private Image end, hit;
+    private Image ggYouLost;
     
     private final LoopingColor backgroundColor = new LoopingColor(0.2F);
     private final LoopingColor boxesColor = new LoopingColor(0.4F);
@@ -70,6 +71,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private boolean addSpeed = true;
     private boolean reactions = false, ep = false;
     private boolean hitmarker = false;
+    private boolean lost = false;
     
     private Color rectangles = new Color(0,0,0);
     private Color course = new Color(255,255,255);
@@ -85,7 +87,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private long currentTime = 0;
     private long lastPickup = System.currentTimeMillis();
     
-    private final Sound backgroundMusic, mlgReaction, darude, rekt;
+    private final Sound backgroundMusic, mlgReaction, darude, rekt, sadHorn;
     
     public Contents(){
         super.setDoubleBuffered(true);
@@ -111,22 +113,30 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         mlgReaction = new Sound("mlg_reaction.wav");
         darude = new Sound("darude.wav");
         rekt = new Sound("rekt.wav");
+        sadHorn = new Sound("sadHorn.wav");
         backgroundMusic.play();
         
+        ImageIcon ii = new ImageIcon(this.getClass().getResource("player.jpeg"));
+        ImageIcon ii2 = new ImageIcon(this.getClass().getResource("images.jpeg"));
+        ImageIcon ii3 = new ImageIcon(this.getClass().getResource("hitmarkerFiller.jpeg"));
+        ImageIcon ii4 = new ImageIcon(this.getClass().getResource("gitGud.jpeg"));
+        
+        character = ii.getImage();
+        end = ii2.getImage();
+        hit = ii3.getImage();
+        ggYouLost = ii4.getImage();
+        
+        character = scaledImage(character,50,50);
+        end = scaledImage(end,1000,700);
+        hit = scaledImage(end,100,100);
+        ggYouLost = scaledImage(ggYouLost, 1000, 700);
     }
 
     @Override
     public void paintComponent(Graphics g){ 
         super.paintComponent(g);
         Graphics g2d = (Graphics2D)g;
-        g2d.setFont(new Font("TimesRoman", Font.BOLD, 25)); 
-        ImageIcon ii = new ImageIcon(this.getClass().getResource("player.jpeg"));
-        ImageIcon ii4 = new ImageIcon(this.getClass().getResource("images.jpeg"));
-        ImageIcon ii5 = new ImageIcon(this.getClass().getResource("hitmarkerFiller.jpeg"));
-     
-        character = ii.getImage();
-        end = ii4.getImage();
-        hit = ii5.getImage();
+        g2d.setFont(new Font("TimesRoman", Font.BOLD, 25));
         
         for (Filler filler : fillers) //changes coordinates of fillers
         {
@@ -137,13 +147,17 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         for (Collectable collectable : collectables) {
             collectable.setImage(scaledImage(collectable.getImage(), 40, 40));
         }
-
         
-        character = scaledImage(character,50,50);
-        end = scaledImage(end,1000,700);
-        hit = scaledImage(end,100,100);
+        if(lost){
+            g2d.drawImage(ggYouLost, 0, 0, this);
+            backgroundMusic.stop();
+            mlgReaction.stop();
+            darude.stop();
+            rekt.stop();
+            sadHorn.play();
+            return;
+        }
         
-
         setBackground(rectangles); 
 
         g2d.setColor(course);
@@ -290,6 +304,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
      * Detects if you are touching a collectable
      */
     public void detectHit(){
+        if(lost) return;
         for (Collectable collectable : collectables) {
             
             // If player is touching collectable
@@ -335,6 +350,19 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         ///////////////
         
         isWon = false;
+        return false;
+    }
+    
+    /**
+     * Returns true and sets 'lost' to true if player has ran out of time
+     * 
+     * @return : True if player has ran out of time
+     */
+    public boolean checkLose(){
+        if((750 - (int)((System.currentTimeMillis()-lastPickup)/2.5)) <= 0){
+            lost = true;
+            return true;
+        }
         return false;
     }
     
@@ -473,6 +501,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         
         checkWin();//Possible end  
         
+        checkLose();//Possible end
         
         updateCurrent();//Updates 
         regenerate();//Implied Doctor Who reference

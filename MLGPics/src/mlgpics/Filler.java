@@ -30,8 +30,8 @@ public class Filler {
         img = images[(int)(Math.random()*8)];
         x = (int)(Math.random()*1000);
         y = (int)(Math.random()*700);
-        xSpeed = (int)(Math.random()*25 + 1);
-        ySpeed = (int)(Math.random()*25 + 1);
+        xSpeed = (int)(Math.random()*7 + 1);
+        ySpeed = (int)(Math.random()*7 + 1);
         isOn = false;
     }
     
