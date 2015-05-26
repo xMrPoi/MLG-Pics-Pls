@@ -21,7 +21,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 /**
  *
- * @author David
+ * @author David, Jack
  */
 public class Contents extends JPanel implements ActionListener, KeyListener
 {
