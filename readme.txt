@@ -1,1 +1,1 @@
-This program will 'mlgify’ your pictures
+A PacMan type game that was MLGified

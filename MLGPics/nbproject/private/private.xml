@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-<<<<<<< HEAD
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="7"/>
-=======
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
->>>>>>> 6c3347e707349844e42fc9ced774f17473be67ad
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/Users/David/Desktop/MLG-Pics-Pls/MLGPics/src/mlgpics/Contents.java</file>
+            <file>file:/Users/David/Desktop/MLG-Pics-Pls/MLGPics/src/mlgpics/LoopingColor.java</file>
+            <file>file:/Users/David/Desktop/MLG-Pics-Pls/MLGPics/src/mlgpics/Filler.java</file>
+=======
+            <file>file:/C:/Users/Jack/Desktop/Server/Git/MLG-Pics-Pls/MLGPics/src/mlgpics/Contents.java</file>
+>>>>>>> 2dc3634a214c88de60aa07f3bcc999bdedabc63c
         </group>
     </open-files>
 </project-private>
