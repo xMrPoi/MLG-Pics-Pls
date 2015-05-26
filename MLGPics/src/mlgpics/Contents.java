@@ -72,6 +72,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private boolean reactions = false, ep = false;
     private boolean hitmarker = false;
     private boolean lost = false;
+    private boolean speedsUpdated = false, speedsUpdatedAgain = false;//lelz
     
     private Color rectangles = new Color(0,0,0);
     private Color course = new Color(255,255,255);
@@ -150,6 +151,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         
         if(lost){
             g2d.drawImage(ggYouLost, 0, 0, this);
+            g2d.drawString("Total memes collected: "+ score, 25, 25);
             backgroundMusic.stop();
             mlgReaction.stop();
             darude.stop();
@@ -185,10 +187,10 @@ public class Contents extends JPanel implements ActionListener, KeyListener
                 g2d.drawImage(filler.getImg(), filler.getX(), filler.getY(), this);
             }
         }
-        if(hitmarker)
+        /*if(hitmarker)
         {
             g2d.drawImage(hit, x, y, this);
-        }
+        }*/
         
         if(isWon)
         {
@@ -209,6 +211,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
             catch(InterruptedException ie)
             {}
             
+            
         }
         else
         {
@@ -220,9 +223,9 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         // Subtracting the time in milliseconds between last Collectable
         //    and the current time from 750 to get a new width for the countdown
         g2d.setColor(Color.blue);
-        g2d.fillRect(timerX, timerY, 750 - (int)((System.currentTimeMillis()-lastPickup)/2.5), 20);
+        g2d.fillRect(timerX, timerY, 950 - (int)((System.currentTimeMillis()-lastPickup)/2.5), 20);
         g2d.setColor(Color.black);
-        g2d.drawRect(timerX, timerY, 750 - (int)((System.currentTimeMillis()-lastPickup)/2.5), 20);
+        g2d.drawRect(timerX, timerY, 950 - (int)((System.currentTimeMillis()-lastPickup)/2.5), 20);
     }
     
     // Moves player 'speed' amount up
@@ -359,7 +362,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
      * @return : True if player has ran out of time
      */
     public boolean checkLose(){
-        if((750 - (int)((System.currentTimeMillis()-lastPickup)/2.5)) <= 0){
+        if((950 - (int)((System.currentTimeMillis()-lastPickup)/2.5)) <= 0){
             lost = true;
             return true;
         }
@@ -421,7 +424,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
      * Regenerates random Collectable
      */
     public void regenerate(){
-        if(currentTime % 40 == 0)
+        if(currentTime % 30 == 0)
             collectables[(int)(Math.random()*20)].setCollected(false);
     }
     
@@ -459,7 +462,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     // 1 in 10 chance of spawning a Filler
     public void addSpam()
     {
-        if((int)(Math.random()*1000) > 700)
+        if((int)(Math.random()*1000) > 500)
         {
             //fillers[(int)(Math.random()*20)].turnOn();
             fillers[(int)(Math.random()*30)].turnOn();
@@ -472,6 +475,14 @@ public class Contents extends JPanel implements ActionListener, KeyListener
             course = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
             rectangles = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
             rekt.play();
+            if(!speedsUpdated)
+            {
+                for(int ind = 0; ind < fillers.length; ind++)
+                {
+                    fillers[ind].faster();
+                }
+                speedsUpdated = true;
+            }
             
         }
         else if(score >= 1500){
@@ -480,6 +491,13 @@ public class Contents extends JPanel implements ActionListener, KeyListener
                 mlgReaction.play();
                 darude.play();
                 backgroundMusic.stop();
+                if(!speedsUpdatedAgain)
+                {
+                    for(int ind = 0; ind < fillers.length; ind++)
+                    {
+                        fillers[ind].faster();
+                    }
+                }
             }
             
             rectangles = boxesColor.nextColor();

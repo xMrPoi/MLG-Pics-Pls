@@ -78,6 +78,12 @@ public class Filler {
         img = i;
     }
     
+    public void faster()
+    {
+        xSpeed *= 2;
+        ySpeed *= 2;
+    }
+    
     
     
     
