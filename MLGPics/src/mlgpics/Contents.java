@@ -428,19 +428,6 @@ public class Contents extends JPanel implements ActionListener, KeyListener
             collectables[(int)(Math.random()*20)].setCollected(false);
     }
     
-    public void updateSpeed(){
-        if(score % 200 == 0 && score != 0 && addSpeed){
-            speed += 5;
-            addSpeed = false;
-        }
-        
-        else if(timesRun == 3000)
-             addSpeed = true;
-        
-        timesRun++;
-    }
-    
-    
     public void updateCurrent(){
         currentTime = System.currentTimeMillis() - startTime;
     }
@@ -524,12 +511,8 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         updateCurrent();//Updates 
         regenerate();//Implied Doctor Who reference
            
-        //updateInterval(); 
-        updateSpeed();
-        
         //added to collectable pickup
         //addSpam();
-                
                 
         updateColors();
         repaint();
