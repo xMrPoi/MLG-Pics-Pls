@@ -57,6 +57,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private Image end, hit;
     private Image ggYouLost;
     private Image spooky;
+    private Image start;
     
     private final LoopingColor backgroundColor = new LoopingColor(0.2F, .001F);
     private final LoopingColor boxesColor = new LoopingColor(0.4F, .001F);
@@ -71,6 +72,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     private boolean reactions = false, ep = false;
     private boolean lost = false;
     private boolean speedsUpdated = false, speedsUpdatedAgain = false;//lelz
+    private boolean space = false;
     
     private Color rectangles = new Color(0,0,0);
     private Color course = new Color(255,255,255);
@@ -116,11 +118,13 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         ImageIcon ii2 = new ImageIcon(this.getClass().getResource("images.jpeg"));
         ImageIcon ii3 = new ImageIcon(this.getClass().getResource("hitmarkerFiller.jpeg"));
         ImageIcon ii4 = new ImageIcon(this.getClass().getResource("gitGud.jpeg"));
+        ImageIcon ii5 = new ImageIcon(this.getClass().getResource("start.jpeg"));
         
         character = ii.getImage();
         end = ii2.getImage();
         hit = ii3.getImage();
         ggYouLost = ii4.getImage();
+        start = ii5.getImage();
 
         
         
@@ -128,12 +132,15 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         end = scaledImage(end,1000,700);
         hit = scaledImage(end,100,100);
         ggYouLost = scaledImage(ggYouLost, 1000, 700);
+        start = scaledImage(start, 1000, 700);
     }
 
     @Override
     public void paintComponent(Graphics g){ 
         super.paintComponent(g);
         Graphics g2d = (Graphics2D)g;
+        if(space)
+        {
         g2d.setFont(new Font("TimesRoman", Font.BOLD, 25));
         
         for (Filler filler : fillers) //changes coordinates of fillers
@@ -195,35 +202,60 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         g2d.fillRect(timerX, timerY, 750 - (int)((System.currentTimeMillis()-lastPickup)/2), 20);
         g2d.setColor(Color.black);
         g2d.drawRect(timerX, timerY, 750 - (int)((System.currentTimeMillis()-lastPickup)/2), 20);
+        }
+        else
+        {
+            g2d.drawImage(start,0,0,this);
+        }
     }
     
     // Moves player 'speed' amount up
     public void up(){
-        xV = 0;
-        yV = -speed;
+        if(space)
+        {
+            xV = 0;
+            yV = -speed;
+        }
     }
     
     // Moves player 'speed' amount down
     public void down(){   
-        xV = 0;
-        yV = speed;
+        if(space)
+        {
+            xV = 0;
+            yV = speed;
+        }
     }
     
     // Moves player 'speed' amount left
     public void left(){
-        xV = -speed;
-        yV = 0;
+        if(space)
+        {
+            xV = -speed;
+            yV = 0;
+        }
     }
     
     // Moves player 'speed' amount right
     public void right(){
-        xV = speed;
-        yV = 0;
+        if(space)
+        {
+            xV = speed;
+            yV = 0;
+        }
     }
     
     public void reset(){
-        xV = 0;
-        yV = 0;
+        if(space)
+        {
+            xV = 0;
+            yV = 0;
+        }   
+    }
+    
+    public void space(){
+        space = true;
+        lastPickup = System.currentTimeMillis();
     }
     
     @Override
@@ -233,7 +265,6 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         
         if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W)
             up();
-        
         
         if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S)
             down();
@@ -245,6 +276,10 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         
         if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D)
             right();
+        
+        
+        if(code == KeyEvent.VK_SPACE)
+            space();
         
     }
     @Override
@@ -298,11 +333,13 @@ public class Contents extends JPanel implements ActionListener, KeyListener
      * @return : True if player has ran out of time
      */
     public boolean checkLose(){
-        if((750 - (int)((System.currentTimeMillis()-lastPickup)/2)) <= 0){
+        
+        if((750 - (int)((System.currentTimeMillis()-lastPickup)/2)) <= 0 && space){
             lost = true;
             return true;
         }
         return false;
+        
     }
     
     
@@ -369,7 +406,9 @@ public class Contents extends JPanel implements ActionListener, KeyListener
      * Sets time since last pickup to currentTimeMillis
      */
     public void updateCountdown(){
-        lastPickup = System.currentTimeMillis();
+
+            lastPickup = System.currentTimeMillis();
+
     }
     
     // 1 in 10 chance of spawning a Filler
@@ -384,6 +423,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     }
     public void updateColors()
     {
+        
         if(score >= 3000){
             course = epBoxesColor.nextColor();
             rectangles = epBackgroundColor.nextColor();
