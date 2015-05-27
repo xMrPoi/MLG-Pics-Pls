@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.image.BufferedImage;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 /**
@@ -54,24 +53,21 @@ public class Contents extends JPanel implements ActionListener, KeyListener
                                 //new Filler(),new Filler(),new Filler(),
                                 //new Filler(),new Filler(),new Filler()};//60
     
-    Toolkit toolkit = Toolkit.getDefaultToolkit();
-    
-    
     private Image character;
     private Image end, hit;
     private Image ggYouLost;
     private Image spooky;
     
-    private final LoopingColor backgroundColor = new LoopingColor(0.2F);
-    private final LoopingColor boxesColor = new LoopingColor(0.4F);
+    private final LoopingColor backgroundColor = new LoopingColor(0.2F, .001F);
+    private final LoopingColor boxesColor = new LoopingColor(0.4F, .001F);
+    private final LoopingColor epBackgroundColor = new LoopingColor(0.2F, .01F);
+    private final LoopingColor epBoxesColor = new LoopingColor(0.4F, .01F);
     
     private int x = 475, y = 150;
     private int xV = 0;
     private int yV = 0;
     private final int timerX = 180, timerY = 6;
     
-    private boolean isWon = false;
-    private boolean addSpeed = true;
     private boolean reactions = false, ep = false;
     private boolean lost = false;
     private boolean speedsUpdated = false, speedsUpdatedAgain = false;//lelz
@@ -81,12 +77,10 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     
     private Timer t;
     
-    private int score = 0, finScore = 0;
+    private int score = 0;
     private int speed = 5;
-    private int timesRun = 0;
     
     private final long startTime = System.currentTimeMillis();
-    private long currentTime = 0;
     private long lastPickup = System.currentTimeMillis();
     
     private final Sound backgroundMusic, mlgReaction, darude, rekt, sadHorn;
@@ -95,8 +89,8 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         super.setDoubleBuffered(true);
         t = new Timer(5,this);
         t.start();
-        addKeyListener(this);
         setFocusable(true);
+        addKeyListener(this);
         setFocusTraversalKeysEnabled(false);
         for(int ind = 0; ind < 7; ind++)
             collectables[ind] = (new Collectable(images[(int)(Math.random()*6)],ind * 150 + 30, 35));
@@ -198,9 +192,9 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         // Subtracting the time in milliseconds between last Collectable
         //    and the current time from 750 to get a new width for the countdown
         g2d.setColor(Color.blue);
-        g2d.fillRect(timerX, timerY, 950 - (int)((System.currentTimeMillis()-lastPickup)/2.5), 20);
+        g2d.fillRect(timerX, timerY, 750 - (int)((System.currentTimeMillis()-lastPickup)/2), 20);
         g2d.setColor(Color.black);
-        g2d.drawRect(timerX, timerY, 950 - (int)((System.currentTimeMillis()-lastPickup)/2.5), 20);
+        g2d.drawRect(timerX, timerY, 750 - (int)((System.currentTimeMillis()-lastPickup)/2), 20);
     }
     
     // Moves player 'speed' amount up
@@ -304,7 +298,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
      * @return : True if player has ran out of time
      */
     public boolean checkLose(){
-        if((950 - (int)((System.currentTimeMillis()-lastPickup)/2.5)) <= 0){
+        if((750 - (int)((System.currentTimeMillis()-lastPickup)/2)) <= 0){
             lost = true;
             return true;
         }
@@ -367,12 +361,8 @@ public class Contents extends JPanel implements ActionListener, KeyListener
      * Regenerates random Collectable
      */
     public void regenerate(){
-        if(currentTime % 30 == 0)
+        if((System.currentTimeMillis() - startTime) % 30 == 0)
             collectables[(int)(Math.random()*20)].setCollected(false);
-    }
-    
-    public void updateCurrent(){
-        currentTime = System.currentTimeMillis() - startTime;
     }
     
     /**
@@ -385,7 +375,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     // 1 in 10 chance of spawning a Filler
     public void addSpam()
     {
-        if((int)(Math.random()*1000) > 900)
+        if((int)(Math.random()*1000) > 800)
         {
             //fillers[(int)(Math.random()*20)].turnOn();
             fillers[(int)(Math.random()*30)].turnOn();
@@ -395,8 +385,8 @@ public class Contents extends JPanel implements ActionListener, KeyListener
     public void updateColors()
     {
         if(score >= 3000){
-            course = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
-            rectangles = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+            course = epBoxesColor.nextColor();
+            rectangles = epBackgroundColor.nextColor();
             rekt.play();
             if(!speedsUpdated)
             {
@@ -442,7 +432,6 @@ public class Contents extends JPanel implements ActionListener, KeyListener
         
         checkLose();//Possible end
         
-        updateCurrent();//Updates 
         regenerate();//Implied Doctor Who reference
            
         updateColors();

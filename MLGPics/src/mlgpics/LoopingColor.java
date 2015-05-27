@@ -16,9 +16,11 @@ import java.awt.Color;
 public class LoopingColor {
     
     private float hue;
+    private float hueIncrease;
     
-    public LoopingColor(float startingHue){
+    public LoopingColor(float startingHue, float hueIncrease){
         hue = startingHue;
+        this.hueIncrease = hueIncrease;
     }
     
     // Loops through hues in the color pallete creating
@@ -26,8 +28,8 @@ public class LoopingColor {
     public Color nextColor(){
         if(hue == 1){
             hue = 0;
-        }else hue += .01;
-        return Color.getHSBColor(hue, .9F, .8F);
+        }else hue += hueIncrease;
+        return Color.getHSBColor(hue, .9F, .9F);
     }
     
 }
