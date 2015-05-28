@@ -7,7 +7,6 @@ package mlgpics;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -16,7 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -29,13 +27,13 @@ import javax.swing.Timer;
 public class Contents extends JPanel implements ActionListener, KeyListener {
 
     private Collectable[] collectables = new Collectable[21];
-    private Image[] images = {new ImageIcon(this.getClass().getResource("dew.jpeg")).getImage(),
+    private final Image[] images = {new ImageIcon(this.getClass().getResource("dew.jpeg")).getImage(),
         new ImageIcon(this.getClass().getResource("dewLogo.jpeg")).getImage(),
         new ImageIcon(this.getClass().getResource("doritoAndDew.jpeg")).getImage(),
         new ImageIcon(this.getClass().getResource("doritoLogo.jpeg")).getImage(),
         new ImageIcon(this.getClass().getResource("euphorito.jpeg")).getImage(),
         new ImageIcon(this.getClass().getResource("RV1BwzL.jpeg")).getImage()};
-    private Filler[] fillers = {new Filler(), new Filler(), new Filler(),
+    private final Filler[] fillers = {new Filler(), new Filler(), new Filler(),
         new Filler(), new Filler(), new Filler(),
         new Filler(), new Filler(), new Filler(),
         new Filler(), new Filler(), new Filler(),
@@ -198,10 +196,10 @@ public class Contents extends JPanel implements ActionListener, KeyListener {
             // Subtracting the time in milliseconds between last Collectable
             //    and the current time from 750 to get a new width for the countdown
             g2d.setColor(Color.blue);
-            g2d.fillRect(timerX, timerY, 750 - (int) ((System.currentTimeMillis() - lastPickup) / 10), 20);
+            g2d.fillRect(timerX, timerY, 750 - (int) ((System.currentTimeMillis() - lastPickup) / 2), 20);
             g2d.setColor(Color.black);
 
-            g2d.drawRect(timerX, timerY, 750 - (int) ((System.currentTimeMillis() - lastPickup) / 10), 20);
+            g2d.drawRect(timerX, timerY, 750 - (int) ((System.currentTimeMillis() - lastPickup) / 2), 20);
         } else {
             g2d.drawImage(start, 0, 0, this);
         }
@@ -304,6 +302,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener {
      * Detects if you are touching a collectable
      */
     public void detectHit() {
+        if(lost) return;
         for (Collectable collectable : collectables) {
 
             // If player is touching collectable
@@ -333,7 +332,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener {
      */
     public boolean checkLose() {
 
-        if ((750 - (int) ((System.currentTimeMillis() - lastPickup) / 10)) <= 0 && space) {
+        if ((750 - (int) ((System.currentTimeMillis() - lastPickup) / 2)) <= 0 && space) {
 
             lost = true;
             return true;
@@ -439,8 +438,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener {
 
     public void updateColors() {
         if (score >= 3000) {
-            if((Math.random()*1000) >= 500)
-            {
+            if((Math.random()*1000) >= 900){
                 course = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
                 rectangles = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
             }
