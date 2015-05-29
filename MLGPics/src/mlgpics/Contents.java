@@ -27,13 +27,13 @@ import javax.swing.Timer;
 public class Contents extends JPanel implements ActionListener, KeyListener {
     
     private Collectable[] collectables = new Collectable[21];
-    private final Image[] images = {new ImageIcon(this.getClass().getResource("dew.jpeg")).getImage(),
+    private final Image[] images = {new ImageIcon(this.getClass().getResource("dew.jpeg")).getImage(), //putting images used into images[]
         new ImageIcon(this.getClass().getResource("dewLogo.jpeg")).getImage(),
         new ImageIcon(this.getClass().getResource("doritoAndDew.jpeg")).getImage(),
         new ImageIcon(this.getClass().getResource("doritoLogo.jpeg")).getImage(),
         new ImageIcon(this.getClass().getResource("euphorito.jpeg")).getImage(),
         new ImageIcon(this.getClass().getResource("RV1BwzL.jpeg")).getImage()};
-    private final Filler[] fillers = {new Filler(), new Filler(), new Filler(),
+    private final Filler[] fillers = {new Filler(), new Filler(), new Filler(), //putting fillers into fillers[]
         new Filler(), new Filler(), new Filler(),
         new Filler(), new Filler(), new Filler(),
         new Filler(), new Filler(), new Filler(),
@@ -61,16 +61,16 @@ public class Contents extends JPanel implements ActionListener, KeyListener {
     
     private final LoopingColor backgroundColor = new LoopingColor(0.2F, .01F);
     private final LoopingColor boxesColor = new LoopingColor(0.4F, .01F);
-    //private final LoopingColor epBackgroundColor = new LoopingColor(0.2F, .01F);
-    //private final LoopingColor epBoxesColor = new LoopingColor(0.4F, .01F);
+    
+    private final int firstChange = 1500, secondChange = 3000;
     
     private int x = 475, y = 150;
     private int xV = 0;
     private int yV = 0;
     private final int timerX = 180, timerY = 6;
     
-    private boolean reactions = false, ep = false;
-    private boolean lost = false, gameStarted = false;
+    private boolean reactions = false;
+    private boolean lost = false;
     private boolean speedsUpdated = false, speedsUpdatedAgain = false;//lelz
     private boolean space = false;
     
@@ -80,7 +80,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener {
     private Timer t;
     
     private int score = 0;
-    private int speed = 5;
+    private final int speed = 5;
     
     private long startTime;
     private long lastPickup;
@@ -89,12 +89,12 @@ public class Contents extends JPanel implements ActionListener, KeyListener {
     
     public Contents() {
         super.setDoubleBuffered(true);
-        t = new Timer(5, this);
+        t = new Timer(5, this);//Checks for an event every 5 milliseconds
         t.start();
         setFocusable(true);
         addKeyListener(this);
         setFocusTraversalKeysEnabled(false);
-        for (int ind = 0; ind < 7; ind++) {
+        for (int ind = 0; ind < 7; ind++) {//Spawns collectables on board
             collectables[ind] = (new Collectable(images[(int) (Math.random() * 6)], ind * 150 + 30, 35));
         }
         for (int ind = 7; ind < 14; ind++) {
@@ -104,7 +104,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener {
             collectables[ind] = (new Collectable(images[(int) (Math.random() * 6)], (ind % 7) * 150 + 30, 630));
         }
         
-        for (Filler filler : fillers) {
+        for (Filler filler : fillers) {//Puts fillers aka spam on board
             filler.setImg(scaledImage(filler.getImg(), (int) (Math.random() * 100 + 50), (int) (Math.random() * 100 + 50)));
         }
         
@@ -153,8 +153,9 @@ public class Contents extends JPanel implements ActionListener, KeyListener {
         }
         
         if (lost) {
+            g2d.setFont(new Font("TimesRoman", Font.BOLD, 40));
             g2d.drawImage(ggYouLost, 0, 0, this);
-            g2d.drawString("Total memes collected: " + score, 25, 25);
+            g2d.drawString("Score: " + score, 250, 190);
             backgroundMusic.stop();
             mlgReaction.stop();
             darude.stop();
@@ -169,7 +170,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener {
         
         g2d.fillRect(0, 0, 1000, 100);
         g2d.fillRect(0, 0, 100, 700);
-        g2d.fillRect(900, 0, 100, 700);
+        g2d.fillRect(900, 0, 100, 700);//Draws track
         g2d.fillRect(0, 600, 1000, 100);
         
         g2d.fillRect(450, 0, 100, 700);
@@ -435,20 +436,20 @@ public class Contents extends JPanel implements ActionListener, KeyListener {
     }
     
     public void updateColors() {
-        if (score >= 3000) {
+        if (score >= secondChange) {
             if((Math.random()*1000) >= 900){
                 course = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
                 rectangles = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
             }
             rekt.play();
             if (!speedsUpdated) {
-                for (int ind = 0; ind < fillers.length; ind++) {
-                    fillers[ind].faster();
+                for (Filler filler : fillers) {
+                    filler.faster();
                 }
                 speedsUpdated = true;
             }
             
-        } else if (score >= 1500) {
+        } else if (score >= firstChange) {
             if (!reactions) {
                 reactions = true;
                 mlgReaction.play();
