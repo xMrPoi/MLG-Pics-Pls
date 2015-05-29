@@ -191,7 +191,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener {
         g2d.setColor(Color.black);
         g2d.drawString("Score: " + score, 25, 25);
         
-        // 750 - (int)((System.currentTimeMillis()-lastPickup)/2.5)
+        // 750 - (int)((System.currentTimeMillis()-lastPickup)/2)
         // Subtracting the time in milliseconds between last Collectable
         //    and the current time from 750 to get a new width for the countdown
         g2d.setColor(Color.blue);
@@ -243,6 +243,7 @@ public class Contents extends JPanel implements ActionListener, KeyListener {
     }
     
     public void space() {
+        if(space) return;
         space = true;
         lastPickup = System.currentTimeMillis();
     }
