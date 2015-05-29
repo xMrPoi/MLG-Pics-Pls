@@ -5,9 +5,8 @@
  */
 package mlgpics;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sun.audio.AudioPlayer;
@@ -19,7 +18,7 @@ import sun.audio.AudioStream;
  * @author Jack
  */
 public class Sound {
-    
+
     private AudioStream as = null;
     
     public Sound(String path){
@@ -27,24 +26,15 @@ public class Sound {
     }
 
     /**
-     * @param url : The file name you are accessing
-     * @return : Full path name for file in the jar
-     */
-    private static String getURL(String url) {
-        return Runner.class.getResource(url).toString().replace("file:", "");
-    }
-    
-    /**
      * Initializes all variables needed to play music
      * 
      * @param url : Path to audio file playing
      */
     private void setupSound(String url) {
-        FileInputStream in = null;
-        try {
-            in = new FileInputStream(getURL(url));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(url + " not found");
+        InputStream in = getClass().getResourceAsStream(url);
+        if(in == null){
+            System.out.println("File not found!");
+            return;
         }
         try {
             as = new AudioStream(in);
